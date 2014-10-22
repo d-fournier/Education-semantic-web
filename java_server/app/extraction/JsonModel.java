@@ -1,4 +1,4 @@
-package semantic_web.extraction;
+package extraction;
 
 public class JsonModel {
 
