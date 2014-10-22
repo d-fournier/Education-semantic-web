@@ -1,6 +1,7 @@
    $(document).ready(function() {
-        $('#search').click(function()
-		{
+
+		$('#search-form').submit(function(event){
+			event.preventDefault();
 			var apiKey = "AIzaSyDZjrXVfbGRsUIZpOpB_I9BkIkIhQWoJ_Y";
 			var cx = '016813502462276054558:2encdk-x_ka';
 			var query = $('#query').val();
@@ -15,7 +16,7 @@
 											+ "&start=" + (i*resultsPerPage+1); 
 			
 				$.getJSON( getQueryResultJsonUrl, function(data){
-					console.log(data);
+					formatJSON(data);
 				});
 				
 				var jqxhr = $.getJSON( getQueryResultJsonUrl, function() {
@@ -29,6 +30,15 @@
 				});
 			}
 			
-  		
-		});
+			});
       });
+	  
+	function formatJSON(rawResponseJSON){
+		console.log("This is your shit : " );
+		var searchTerms = rawResponseJSON.queries.request[0].searchTerms;
+		var result = rawResponseJSON.items;
+		for(item in result){
+			console.log(result[item]);
+		}
+	
+	}
