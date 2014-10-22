@@ -18,6 +18,7 @@ import com.google.gson.stream.JsonReader;
 public class TextExtractor {
 
 	public static final String JSON_SAMPLE = "{    \"search\":\"Bordeaux\",    \"searchEngine\":\"google.fr\",    \"result\":[        {            \"title\":\"Site officiel de la ville de Bordeaux - Bordeaux\",            \"url\":\"www.bordeaux.fr\",            \"description\":\"Le site officiel de la ville informe sur l'actualit\u00E9, l'agenda, les services, les d\u00E9marches et publie des guides pour sortir, \u00E9tudier, travailler et vivre \u00E0 Bordeaux.\"        },        {            \"title\":\"Bordeaux \u2014 Wikip\u00E9dia\",            \"url\":\"fr.wikipedia.org/wiki/Bordeaux\",            \"description\":\"Bordeaux (prononc\u00E9 [b??.'d?o ]) est une commune du Sud-Ouest de la France, pr\u00E9fecture du d\u00E9partement de la Gironde et chef-lieu de la r\u00E9gion d'Aquitaine.\"        }    ]}";
+	public static final String extensionFile = ".resultsearch";
 
 	public static void main(String[] args){
 		extractDataFromJson(JSON_SAMPLE);
@@ -100,7 +101,7 @@ public class TextExtractor {
 		folder.mkdirs();
 		// un dossier par search
 		// extension tmp pour gitignore
-		String pathAndFileName = "./tmp/"+externFolder+"/"+internFolder+"/" + filenameFinal+".tmp";
+		String pathAndFileName = "./tmp/"+externFolder+"/"+internFolder+"/" + filenameFinal+extensionFile;
 		try {
 			PrintWriter out = new PrintWriter(pathAndFileName);
 			out.println(fileName);
