@@ -17,7 +17,7 @@ hs_err_pid*
 .gradle
 bin/
 tmp/
-*.tmp
+*.resultsearch
 *.bak
 *.swp
 *~.nib
@@ -42,3 +42,6 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+
+.tmp
