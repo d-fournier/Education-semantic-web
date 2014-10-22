@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
@@ -66,13 +68,33 @@ public class DBpediaSpotlightClient extends AnnotationClient {
                 File input = new File(""); //Fichier non annote
                 File output = new File(""); //Fichier annote
                 
-                File folder = new File("files/input");
-                File[] listOfFiles = folder.listFiles();
-                for(int i=0; i<listOfFiles.length;i++)
+                File folder = new File("tmp");
+                File[] queries = folder.listFiles();
+                
+                for( int i=0; i<queries.length; i++)
                 {
-                        input = listOfFiles[i];
-                        output = new File("files/output/output_"+i);
-                        c.evaluate(input, output);
-                }
+                	if(queries[i].isDirectory())
+                	{
+                		File[] searchEngines=queries[i].listFiles();
+                		for(int j=0; j< searchEngines.length; j++)
+                		{
+                			if(searchEngines[j].isDirectory())
+                			{
+                				File[] filesToParse=searchEngines[j].listFiles(new FilenameFilter() {									
+									@Override
+									public boolean accept(File dir, String name) {
+										return name.endsWith(".resultsearch");
+									}
+								});
+                				 for(int k=0; k<filesToParse.length; k++)
+                	                {
+                	                        input = filesToParse[k];
+                	                        output = new File(filesToParse[k].getPath().replace(".resultsearch",".dbpedia"));
+                	                        c.evaluate(input, output);
+                	                }
+                			}
+                		}
+                	}
+                }               
     }
 }
