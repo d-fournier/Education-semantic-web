@@ -16,52 +16,49 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 public class TextExtractor {
-	
-	
+
+	public static final String JSON_SAMPLE = "{    \"search\":\"Bordeaux\",    \"searchEngine\":\"google.fr\",    \"result\":[        {            \"title\":\"Site officiel de la ville de Bordeaux - Bordeaux\",            \"url\":\"www.bordeaux.fr\",            \"description\":\"Le site officiel de la ville informe sur l'actualit\u00E9, l'agenda, les services, les d\u00E9marches et publie des guides pour sortir, \u00E9tudier, travailler et vivre \u00E0 Bordeaux.\"        },        {            \"title\":\"Bordeaux \u2014 Wikip\u00E9dia\",            \"url\":\"fr.wikipedia.org/wiki/Bordeaux\",            \"description\":\"Bordeaux (prononc\u00E9 [b??.'d?o ]) est une commune du Sud-Ouest de la France, pr\u00E9fecture du d\u00E9partement de la Gironde et chef-lieu de la r\u00E9gion d'Aquitaine.\"        }    ]}";
 
 	public static void main(String[] args){
-		extractDataFromJson("{    \"search\":\"Bordeaux\",    \"searchEngine\":\"google.fr\",    \"result\":[        {            \"title\":\"Site officiel de la ville de Bordeaux - Bordeaux\",            \"url\":\"www.bordeaux.fr\",            \"description\":\"Le site officiel de la ville informe sur l'actualit\u00E9, l'agenda, les services, les d\u00E9marches et publie des guides pour sortir, \u00E9tudier, travailler et vivre \u00E0 Bordeaux.\"        },        {            \"title\":\"Bordeaux \u2014 Wikip\u00E9dia\",            \"url\":\"fr.wikipedia.org/wiki/Bordeaux\",            \"description\":\"Bordeaux (prononc\u00E9 [b??.'d?o ]) est une commune du Sud-Ouest de la France, pr\u00E9fecture du d\u00E9partement de la Gironde et chef-lieu de la r\u00E9gion d'Aquitaine.\"        }    ]}");
+		extractDataFromJson(JSON_SAMPLE);
 	}
-	
-	public static void extractDataFromJson (String json){
-		
-		JsonReader reader = new JsonReader(new StringReader(json));
-        JsonParser parser = new JsonParser();
-        try {
-            reader.setLenient(true);
 
-            if(reader.hasNext()){
-                process(parser.parse(reader));
-            }
-        } catch (IOException e) {
-            // TODO
-        } catch (IllegalStateException e){
-        	// TODO
-        	} finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    // Error closing stream
-                }
-            }
-        }
+	public static void extractDataFromJson (String json){
+		JsonReader reader = new JsonReader(new StringReader(json));
+		JsonParser parser = new JsonParser();
+		try {
+			reader.setLenient(true);
+
+			if(reader.hasNext()){
+				parse(parser.parse(reader));
+			}
+		} catch (IOException e) {
+		} catch (IllegalStateException e){
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (final IOException e) {
+					// Error closing stream
+				}
+			}
+		}
 	}
-	
+
 	/**
 	 * Parse Json and save website content into files
 	 * @param element JSonElement
 	 */
-	public static void process(JsonElement element) {
+	public static void parse(JsonElement element) {
 		JsonModel.WebSearch webSearch = new Gson().fromJson(element, JsonModel.WebSearch.class);
 		for(JsonModel.WebPagesItem webPagesListItem : webSearch.result){
 			String bodyFromUrl = extractBodyTextFromUrl(webPagesListItem.url);
 			if(bodyFromUrl != null && bodyFromUrl != ""){
-				saveTextIntoAFile(webSearch.search,webSearch.searchEngine, webPagesListItem.url, bodyFromUrl);       				
+				saveTextIntoFile(webSearch.search,webSearch.searchEngine, webPagesListItem.url, bodyFromUrl);       				
 			}
 		}
 	}
-	
+
 	/**
 	 * Extract body text form an url
 	 * @param url
@@ -71,7 +68,7 @@ public class TextExtractor {
 
 		Document doc = null;
 		Elements elementBody = null;
-		
+
 		// Ajout pour connexion http
 		url = "http://" + url;
 
@@ -83,10 +80,10 @@ public class TextExtractor {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return elementBody.text();
 	}
-	
+
 	/**
 	 * Create a file into ./tmp/externFolder/internalFolder/filename.tmp
 	 * @param externFolder
@@ -94,8 +91,7 @@ public class TextExtractor {
 	 * @param fileName
 	 * @param text
 	 */
-	
-	public static void saveTextIntoAFile(String externFolder,String internFolder, String fileName, String text) {
+	public static void saveTextIntoFile(String externFolder,String internFolder, String fileName, String text) {
 		String filenameFinal = fileName;
 		filenameFinal = filenameFinal.replaceAll("\"", "_");
 		filenameFinal = filenameFinal.replaceAll("/", "_");
