@@ -6,7 +6,7 @@
            var cx = '016813502462276054558:2encdk-x_ka';
            var searchTerms = $('#searchTerms').val();
            //for testing
-           var nbResults = 10;
+           var nbResults = 20;
            var resultsPerPage = 10;
            var nbPages = nbResults / resultsPerPage;
 
@@ -14,7 +14,8 @@
 
                //TODO : find a way to get the search engine dynamically
                searchEngine: "google.fr",
-               results: []
+               results: [],
+               searchTerms:""
            };
            for (var i = 0; i < nbPages; i++) {
                var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
@@ -24,11 +25,22 @@
                });
            }
            console.log(formattedJSON);
+           console.log(JSON.stringify(formattedJSON));
+           var request = $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            type: "POST",
+            dataType: 'json',
+            data: JSON.stringify(formattedJSON),
+            url: "/formatResults"
+        })
+        request.success(function(response) {
+            console.log(response);
+        });
        });
    });
 
    function formatJSON(rawResponseJSON, formattedJSON) {
-       if (!formattedJSON.searchTerms)
+       if (formattedJSON.searchTerms == "")
            formattedJSON.searchTerms = rawResponseJSON.queries.request[0].searchTerms;
 
        var rawResult = rawResponseJSON.items;
