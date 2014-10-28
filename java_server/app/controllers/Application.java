@@ -18,14 +18,14 @@ public class Application extends Controller {
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result formatResults() {
 	  	JsonNode json = request().body().asJson();
-	 	ObjectNode result = Json.newObject();
-	  	String searchEngine = json.findPath("results").textValue();
-	  	if(searchEngine == null) {
-		  return badRequest("Missing parameter [name]");
-	  	} else {
-	    	result=(ObjectNode)json;
-    		return ok(result);
-	  	}
+	 	//ObjectNode result = Json.newObject();
+	  	//String searchEngine = json.findPath("results").textValue();
+	  	//if(searchEngine == null) {
+		 // return badRequest("Missing parameter [name]");
+	  	//} else {
+	    	//result=(ObjectNode)json;
+    		return ok(json);
+	  	//}
 	}
 
 }
