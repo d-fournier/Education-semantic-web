@@ -8,13 +8,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sun.jersey.core.spi.scanning.uri.FileSchemeScanner;
+
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 /**
  * Simple web service-based annotation client for DBpedia Spotlight.
  *
@@ -62,39 +68,55 @@ public class DBpediaSpotlightClient extends AnnotationClient {
                 }
                 return resources;
         }
+        
+        public void writeTextConcepts()
+        {
+        	File input = new File(""); //Fichier non annote
+            File output = new File(""); //Fichier annote
+            
+            File folder = new File("tmp");
+            File[] queries = folder.listFiles();
+            
+            for( int i=0; i<queries.length; i++)
+            {
+            	if(queries[i].isDirectory())
+            	{
+            		File[] searchEngines=queries[i].listFiles();
+            		for(int j=0; j< searchEngines.length; j++)
+            		{
+            			if(searchEngines[j].isDirectory())
+            			{
+            				File[] filesToParse=searchEngines[j].listFiles(new FilenameFilter() {									
+								@Override
+								public boolean accept(File dir, String name) {
+									return name.endsWith(".resultsearch");
+								}
+							});
+            				 for(int k=0; k<filesToParse.length; k++)
+            	                {
+            	                        input = filesToParse[k];
+            	                        output = new File(filesToParse[k].getPath().replace(".resultsearch",".dbpedia"));
+            	                        try {
+											evaluate(input, output);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+            	                }
+            			}
+            		}
+            		
+            		
+            	}
+            } 
+        }
+        
         public static void main(String[] args) throws Exception {
-        DBpediaSpotlightClient c = new DBpediaSpotlightClient ();
+        DBpediaSpotlightClient sc = new DBpediaSpotlightClient ();
+        DBpediaLookupClient lc= new DBpediaLookupClient("berlin");
+         sc.writeTextConcepts();
+         lc.writeConceptFromQuery("berlin");
+        
                 
-                File input = new File(""); //Fichier non annote
-                File output = new File(""); //Fichier annote
-                
-                File folder = new File("tmp");
-                File[] queries = folder.listFiles();
-                
-                for( int i=0; i<queries.length; i++)
-                {
-                	if(queries[i].isDirectory())
-                	{
-                		File[] searchEngines=queries[i].listFiles();
-                		for(int j=0; j< searchEngines.length; j++)
-                		{
-                			if(searchEngines[j].isDirectory())
-                			{
-                				File[] filesToParse=searchEngines[j].listFiles(new FilenameFilter() {									
-									@Override
-									public boolean accept(File dir, String name) {
-										return name.endsWith(".resultsearch");
-									}
-								});
-                				 for(int k=0; k<filesToParse.length; k++)
-                	                {
-                	                        input = filesToParse[k];
-                	                        output = new File(filesToParse[k].getPath().replace(".resultsearch",".dbpedia"));
-                	                        c.evaluate(input, output);
-                	                }
-                			}
-                		}
-                	}
-                }               
+        
     }
 }

@@ -145,7 +145,7 @@ public abstract class AnnotationClient {
                     e.printStackTrace();
                 }
                 for (DBpediaResource e: entities) {
-                    out.println(e.uri());
+                    out.println("http://dbpedia.org/resource/"+e.uri());
                 }
                 out.println();
                 out.flush();
