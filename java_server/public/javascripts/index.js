@@ -30,6 +30,7 @@
        });
    });
 
+   
    function formatJSON(rawResponseJSON) {
        console.log("This is your shit : ");
        var searchTerms = rawResponseJSON.queries.request[0].searchTerms;
@@ -49,7 +50,4 @@
            formattedJSON.results.push(formattedItem);
        }
        console.log(formattedJSON);
-
-
-
    }
