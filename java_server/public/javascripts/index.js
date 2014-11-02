@@ -44,9 +44,10 @@
 
                postRequest.success(function(formattedResults) {
                    console.log(formattedResults);
+                   renderProcessedResults(formattedResults);
                });
 
-
+               //TODO : Ask server to send processed results. Display processed results.
            });
 
 
@@ -68,5 +69,34 @@
        }
 
        return formattedJSON;
+
+   }
+
+   function result(r){
+    //Class definition for a processed result
+
+    var arr = [
+                    '<div class="webResult">',
+                    '<h2><a href="',r.url,'">',r.title,'</a></h2>',
+                    '<p>',r.description,'</p>',
+                    '<a href="',r.url,'">',r.url,'</a>',
+                    //Could add the relevant concepts discovered when processing.
+                    '</div>'
+              ];
+    this.toString = function(){
+      return arr.join('');
+    }
+   }
+   function renderProcessedResults(processedResults){
+        var pageContainer = $('<div>',{class:'pageContainer'});
+        for(var i=0;i<processedResults.results.length;i++){
+          // Creating a new result object and firing its toString method:
+          pageContainer.append(new result(processedResults.results[i]) + '');
+        }
+        pageContainer.append('<div class="clear"></div>')
+                     .hide().appendTo(resultsDiv)
+                     .fadeIn('slow');
+
+
 
    }
