@@ -22,6 +22,7 @@ public class TextExtractor {
 
 	public static void main(String[] args){
 		extractDataFromJson(JSON_SAMPLE);
+		
 	}
 
 	public static void extractDataFromJson (String json){

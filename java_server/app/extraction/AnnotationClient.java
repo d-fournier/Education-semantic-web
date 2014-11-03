@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 //import org.apache.commons.logging.Log;
 //import org.apache.commons.logging.LogFactory;
 
+
 import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -188,6 +189,7 @@ public abstract class AnnotationClient {
 	 * Entity extraction code.
 	 * @param text
 	 * @return
+	 * @throws Exception 
 	 */
-	public abstract List<String> extract(String text);
+	public abstract List<String> extract(String text) throws Exception;
 }
