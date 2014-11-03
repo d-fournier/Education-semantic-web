@@ -12,6 +12,9 @@ public class SimilarityWithJaccard {
 		testCalculateSimilarity();
 	}
 	
+	/**
+	 * calculate similarity between two list of String
+	 */
 	private static void testCalculateSimilarity (){
 		String [] text1 = {"au revoir", "lol", "habile"};
 		String [] text2 = {"au revoir", "habile"};
@@ -19,7 +22,7 @@ public class SimilarityWithJaccard {
 		
 		System.out.println("Résultat similarité avec Jaccard : "+ jaccardResult);
 	}
-
+	
 	public static double calculateSimilarity(String[] text1, String[] text2) {
 		return calc(text1,text2);
 	}
