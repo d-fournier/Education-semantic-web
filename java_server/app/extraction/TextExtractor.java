@@ -18,7 +18,9 @@ public class TextExtractor {
 
 	public static final String JSON_SAMPLE = "{ \"searchEngine\":\"google.fr\", \"results\":[ { \"title\":\"Speedtest.net by Ookla - The Global Broadband Speed Test\", \"url\":\"www.speedtest.net/\", \"description\":\"Test your Internet connection bandwidth to locations around the world with this \\ninteractive broadband speed test from Ookla.\" }, { \"title\":\"Create Tests for Organizational Training and Certification Programs ...\", \"url\":\"www.test.com/\", \"description\":\"Test.com provides a complete software solution for creating online tests and \\nmanaging enterprise and specialist certification programs, in up to 22 languages.\" }, { \"title\":\"Tested\", \"url\":\"www.tested.com/\", \"description\":\"This week\'s Show and Tell is another awesome project shared by our 3D printing \\ncolumnist Sean Charlesworth. Norm visits Sean while in New York to check out ...\" } ], \"searchTerms\":\"Test\" }";
 	public static final String EXTENSION_FILE = ".resultsearch";
+	public static final String REGEX = "(.*?)\\/.*";
 
+	
 	public static void main(String[] args){
 		WebSearch ws = extractSearchResultFromJson(JSON_SAMPLE);
 		downloadWebsiteContent(ws);
@@ -55,7 +57,8 @@ public class TextExtractor {
 		for(WebSearch.WebPagesItem webPagesListItem : webSearch.results){
 			String bodyFromUrl = extractBodyTextFromUrl(webPagesListItem.url);
 			if(bodyFromUrl != null && bodyFromUrl != ""){
-				saveTextIntoFile(webSearch.searchTerms,webSearch.searchEngine, webPagesListItem.url, bodyFromUrl, EXTENSION_FILE);       				
+				String text = webPagesListItem.description.replace("\n", " ") + bodyFromUrl;
+				saveTextIntoFile(webSearch.searchTerms,webSearch.searchEngine, webPagesListItem.url, text, EXTENSION_FILE);       				
 			}
 		}
 	}
@@ -78,7 +81,6 @@ public class TextExtractor {
 			elementBody = doc.select("body");
 		} catch (IOException e) {
 			// An error occurs whilst fetching the URL
-			e.printStackTrace();
 			return null;
 		}
 
@@ -93,9 +95,7 @@ public class TextExtractor {
 	 * @param text
 	 */
 	public static void saveTextIntoFile(String externFolder,String internFolder, String fileName, String text, String extension) {
-		String filenameFinal = fileName;
-		filenameFinal = filenameFinal.replaceAll("\"", "_");
-		filenameFinal = filenameFinal.replaceAll("/", "_");
+		String filenameFinal = getStringFromUrl(fileName);
 
 		File folder = new File("./tmp/"+externFolder+"/"+internFolder);
 		folder.mkdirs();
@@ -110,6 +110,11 @@ public class TextExtractor {
 			// Error during PrintWriter
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getStringFromUrl(String url){
+		String result = url.replaceAll(REGEX, "$1");
+		return result;
 	}
 
 }
