@@ -51,8 +51,8 @@ public class TextExtractor {
 	 * @param element JSonElement
 	 */
 	public static void parse(JsonElement element) {
-		JsonModel.WebSearch webSearch = new Gson().fromJson(element, JsonModel.WebSearch.class);
-		for(JsonModel.WebPagesItem webPagesListItem : webSearch.result){
+		WebSearch webSearch = new Gson().fromJson(element, WebSearch.class);
+		for(WebSearch.WebPagesItem webPagesListItem : webSearch.result){
 			String bodyFromUrl = extractBodyTextFromUrl(webPagesListItem.url);
 			if(bodyFromUrl != null && bodyFromUrl != ""){
 				saveTextIntoFile(webSearch.search,webSearch.searchEngine, webPagesListItem.url, bodyFromUrl);       				

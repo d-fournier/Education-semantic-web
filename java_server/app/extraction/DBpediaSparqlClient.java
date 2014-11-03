@@ -64,7 +64,7 @@ public class DBpediaSparqlClient {
         	                    			for(Triplet t : result.results.bindings){
         	                    				fos.write(("<"+t.s.value+"> ").getBytes());
         	                    				fos.write(("<"+t.p.value+"> ").getBytes());
-        	                    				fos.write(("<"+t.o.value+"> \n").getBytes());
+        	                    				fos.write(("<"+t.o.value.replaceAll("\n", " ").replaceAll("</sup>", "")+">. \n").getBytes());
         	                    			}
         	                    		}
         	                        	fos.close();
