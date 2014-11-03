@@ -95,7 +95,7 @@
        for (var item in rawResult) {
            var formattedItem = {
                title: rawResult[item].title,
-               url: rawResult[item].formattedUrl.replace(/.*?:\/\//g, ""),
+               url: rawResult[item].link.replace(/.*?:\/\//g, ""),
                description: rawResult[item].snippet
            };
            formattedJSON.results.push(formattedItem);
