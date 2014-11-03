@@ -1,3 +1,5 @@
+package extraction;
+
 /**
  * Copyright 2011 Pablo Mendes, Max Jakob
  *
