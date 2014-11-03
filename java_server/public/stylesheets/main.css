@@ -16,9 +16,16 @@ table{
    margin:0 auto;
    text-align: center;
 }
+
 div.centered{
-    text-align: center;
+    margin:0 auto;
+   width: 1000px;
 }
+
+td div{
+    text-align : left;
+}
+
 
  
 .ui-autocomplete{
