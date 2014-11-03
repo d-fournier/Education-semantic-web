@@ -1,20 +1,24 @@
 package controllers;
 
-import play.Logger;
-import play.libs.Json;
+
+import jaccard.RankingWithJaccard;
+
+import java.util.Map;
+
+import akka.serialization.Serialization.Information;
+
+import com.google.gson.Gson;
+
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import extraction.DBpediaLookupClient;
 import extraction.DBpediaSparqlClient;
 import extraction.DBpediaSpotlightClient;
-import extraction.JsonModel;
+import extraction.InformationExtractor;
 import extraction.TextExtractor;
+import extraction.WebSearch;
 
 public class Application extends Controller {
 
@@ -28,9 +32,9 @@ public class Application extends Controller {
 
 		System.out.println("Parse JSON");
 		// Return search
-		JsonModel.WebSearch request = TextExtractor.extractSearchResultFromJson(json);
+		WebSearch request = TextExtractor.extractSearchResultFromJson(json);
 		
-		if(request != null){
+		if(request != null){			
 			System.out.println("Download Website for query : "+request.searchTerms);
 			// Create files with website content
 			TextExtractor.downloadWebsiteContent(request);
@@ -47,8 +51,20 @@ public class Application extends Controller {
 			System.out.println("Create n-triplets for Websites for query : "+request.searchTerms);
 			DBpediaSparqlClient.writeAllRdfFiles(request.searchTerms); 
 			
-			System.out.println("End for query : "+request.searchTerms);
-			return ok("{\"test\":\"coucou\"}");
+			Map<String, Double> ranking = RankingWithJaccard.attributeAJaccardMark(request.searchTerms);
+
+			WebSearch result = new WebSearch();
+			result.searchEngine="SwaggySearchEngine";
+			result.searchTerms=request.searchTerms;
+			result.results = new WebSearch.WebPagesItem[ranking.size()];
+			int i = 0;
+			for(String s : ranking.keySet()){
+				result.results[i] = InformationExtractor.findInfoFromFile(request, s);
+				i++;
+			}	
+			String webServiceResult = new Gson().toJson(result);
+			
+			return ok(webServiceResult);
 
 		}
 		System.out.println("Error Parsing JSON");

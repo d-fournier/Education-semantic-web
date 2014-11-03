@@ -11,7 +11,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
@@ -21,19 +20,19 @@ public class TextExtractor {
 	public static final String EXTENSION_FILE = ".resultsearch";
 
 	public static void main(String[] args){
-		JsonModel.WebSearch ws = extractSearchResultFromJson(JSON_SAMPLE);
+		WebSearch ws = extractSearchResultFromJson(JSON_SAMPLE);
 		downloadWebsiteContent(ws);
 	}
 
-	public static JsonModel.WebSearch extractSearchResultFromJson (String json){
+	public static WebSearch extractSearchResultFromJson (String json){
 		JsonReader reader = new JsonReader(new StringReader(json));
 		JsonParser parser = new JsonParser();
-		JsonModel.WebSearch webSearch = null;
+		WebSearch webSearch = null;
 		try {
 			reader.setLenient(true);
 
 			if(reader.hasNext()){
-				webSearch = new Gson().fromJson(parser.parse(reader), JsonModel.WebSearch.class);
+				webSearch = new Gson().fromJson(parser.parse(reader), WebSearch.class);
 			}
 		} catch (IOException e) {
 		} catch (IllegalStateException e){
@@ -52,11 +51,11 @@ public class TextExtractor {
 	 * Parse Json and save website content into files
 	 * @param element JSonElement
 	 */
-	public static void downloadWebsiteContent(JsonModel.WebSearch webSearch) {
-		for(JsonModel.WebPagesItem webPagesListItem : webSearch.results){
+	public static void downloadWebsiteContent(WebSearch webSearch) {
+		for(WebSearch.WebPagesItem webPagesListItem : webSearch.results){
 			String bodyFromUrl = extractBodyTextFromUrl(webPagesListItem.url);
 			if(bodyFromUrl != null && bodyFromUrl != ""){
-				saveTextIntoFile(webSearch.searchTerms,webSearch.searchEngine, webPagesListItem.url, bodyFromUrl);       				
+				saveTextIntoFile(webSearch.searchTerms,webSearch.searchEngine, webPagesListItem.url, bodyFromUrl, EXTENSION_FILE);       				
 			}
 		}
 	}
@@ -93,7 +92,7 @@ public class TextExtractor {
 	 * @param fileName
 	 * @param text
 	 */
-	public static void saveTextIntoFile(String externFolder,String internFolder, String fileName, String text) {
+	public static void saveTextIntoFile(String externFolder,String internFolder, String fileName, String text, String extension) {
 		String filenameFinal = fileName;
 		filenameFinal = filenameFinal.replaceAll("\"", "_");
 		filenameFinal = filenameFinal.replaceAll("/", "_");
@@ -102,10 +101,9 @@ public class TextExtractor {
 		folder.mkdirs();
 		// un dossier par search
 		// extension tmp pour gitignore
-		String pathAndFileName = "./tmp/"+externFolder+"/"+internFolder+"/" + filenameFinal+EXTENSION_FILE;
+		String pathAndFileName = "./tmp/"+externFolder+"/"+internFolder+"/" + filenameFinal+extension;
 		try {
 			PrintWriter out = new PrintWriter(pathAndFileName);
-			out.println(fileName);
 			out.println(text);	
 			out.close();
 		} catch (FileNotFoundException e) {
