@@ -17,7 +17,6 @@ hs_err_pid*
 .gradle
 bin/
 tmp/
-*.resultsearch
 *.bak
 *.swp
 *~.nib
@@ -44,4 +43,6 @@ local.properties
 .texlipse
 
 
-.tmp
+# 111 mo
+dbpedia-spotlight.jar
+*.resultsearch
