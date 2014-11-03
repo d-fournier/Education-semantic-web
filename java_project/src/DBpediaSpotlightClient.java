@@ -1,4 +1,11 @@
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.dbpedia.spotlight.exceptions.AnnotationException;
@@ -7,24 +14,8 @@ import org.dbpedia.spotlight.model.Text;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.sun.jersey.core.spi.scanning.uri.FileSchemeScanner;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 /**
- * Simple web service-based annotation client for DBpedia Spotlight.
- *
- * @author pablomendes, Joachim Daiber
+ * Web service-based annotation client for DBpedia Spotlight.
  */
 public class DBpediaSpotlightClient extends AnnotationClient {
         //private final static String API_URL = "http://jodaiber.dyndns.org:2222/";
@@ -39,8 +30,6 @@ public class DBpediaSpotlightClient extends AnnotationClient {
                                         "confidence=" + CONFIDENCE
                                         + "&support=" + SUPPORT
                                         + "&text=" + URLEncoder.encode(text.text(), "utf-8"));
-                        // TODO : request for xhtml+xml type and parse it has RDF
-                        // getMethod.addRequestHeader(new Header("Accept", "application/xhtml+xml"))
                         getMethod.addRequestHeader(new Header("Accept", "application/json"));
                         spotlightResponse = request(getMethod);
                 } catch (UnsupportedEncodingException e) {
@@ -112,8 +101,14 @@ public class DBpediaSpotlightClient extends AnnotationClient {
         
         public static void main(String[] args) throws Exception {
         DBpediaSpotlightClient sc = new DBpediaSpotlightClient ();
-        DBpediaLookupClient lc= new DBpediaLookupClient("berlin");
+        
+        //Research of concepts linked to Berlin
+        DBpediaLookupClient lc= new DBpediaLookupClient("berlin"); 
+        
+        //Writing of concepts linked to the results of search motors queries
          sc.writeTextConcepts();
+         
+         //Writing of concepts linked to Berlin (found just before)
          lc.writeConceptFromQuery("berlin");
         
                 
