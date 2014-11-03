@@ -1,14 +1,14 @@
    $(document).ready(function() {
 
        $("#searchTerms").autocomplete({
-              appendTo: ".input-group" , 
+              appendTo: ".input-group" ,
+               delay: 0, 
               autoFocus: true,        
-              source: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby"],
+              source: "/suggestions",
               minLength: 2,
 
 
        });
-
 
 
        $('#searchForm').submit(function(event) {
@@ -74,7 +74,7 @@
        for (var item in rawResult) {
            var formattedItem = {
                title: rawResult[item].title,
-               url: rawResult[item].formattedUrl,
+               url: rawResult[item].formattedUrl.replace(/.*?:\/\//g, ""),
                description: rawResult[item].snippet
            };
            formattedJSON.results.push(formattedItem);
@@ -112,7 +112,5 @@
        pageContainer.append('<div class="clear"></div>')
            .hide().appendTo(processedResultsDiv)
            .fadeIn('slow');
-
-
-
    }
+

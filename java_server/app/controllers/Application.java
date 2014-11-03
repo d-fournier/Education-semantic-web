@@ -1,5 +1,8 @@
 package controllers;
 
+import org.json.JSONObject;
+
+import play.api.mvc.Content;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
@@ -8,6 +11,8 @@ import views.html.index;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import extraction.DBpediaPrefixSearch;
 
 public class Application extends Controller {
 
@@ -27,5 +32,16 @@ public class Application extends Controller {
     		return ok(json);
 	  	//}
 	}
+	
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result suggestions(String prefix) {
+		
+		DBpediaPrefixSearch dp = new DBpediaPrefixSearch(5);
+		return ok(dp.getAutoCompletionList(prefix));
+		
+		
+	}
+	
+	
 
 }

@@ -28,7 +28,7 @@ public class DBpediaPrefixSearch extends AnnotationClient{
 		throw new Exception("not implemented");
 	}
 	
-	public JSONObject getAutoCompletionList(String prefix){
+	public String getAutoCompletionList(String prefix){
 		String spotlightResponse;
 		try {
 			GetMethod getMethod = new GetMethod(API_URL 
@@ -45,27 +45,25 @@ public class DBpediaPrefixSearch extends AnnotationClient{
 		assert spotlightResponse != null;
 		JSONObject resultJSON = null;
 		JSONArray entities = null;
-		JSONObject  result = new JSONObject();
 		JSONArray suggestions = new JSONArray();
 		try {
 			resultJSON = new JSONObject(spotlightResponse);
 			entities = resultJSON.getJSONArray("results");
 			for(int i = 0; i < entities.length(); i++) {
 				try {
-					System.out.println(entities.getJSONObject(i).get("label"));
 					suggestions.put(entities.getJSONObject(i).get("label"));
 					
 				} catch (JSONException e) {
 				}
 			}
-			result.put("suggestions",suggestions);
+		
 			
 		} catch (JSONException e) {
 			return null;
 		}
 		
 		
-		return result;
+		return suggestions.toString();
 	}
 	
 	
