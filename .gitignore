@@ -4,7 +4,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -43,3 +42,7 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+
+# 111 mo
+dbpedia-spotlight.jar
