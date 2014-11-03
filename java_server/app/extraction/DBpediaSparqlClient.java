@@ -15,6 +15,10 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import dbpedia.DbpediaParser;
+import dbpedia.DbpediaParser.Dbpedia_sparql;
+import dbpedia.DbpediaParser.Triplet;
+
 
 public class DBpediaSparqlClient {
 
@@ -51,11 +55,18 @@ public class DBpediaSparqlClient {
         	                {
         	                        input = filesToParse[k];
         	                       
-        	                        output = new File(filesToParse[k].getPath().replace(".dbpedia",".json"));
+        	                        output = new File(filesToParse[k].getPath().replace(".dbpedia",".rdf"));
         	                        try {
         	                        	String response=executeQuery(splitFile(input));
+        	                    		Dbpedia_sparql result = DbpediaParser.parseText(response);
         	                        	FileOutputStream fos=new FileOutputStream(output);
-        	                        	fos.write(response.getBytes());
+        	                    		if(result != null){
+        	                    			for(Triplet t : result.results.bindings){
+        	                    				fos.write(("<"+t.s.value+"> ").getBytes());
+        	                    				fos.write(("<"+t.p.value+"> ").getBytes());
+        	                    				fos.write(("<"+t.o.value+"> \n").getBytes());
+        	                    			}
+        	                    		}
         	                        	fos.close();
         	                        	
 									} catch (Exception e) {
