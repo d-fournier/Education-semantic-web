@@ -30,6 +30,8 @@
        $('#searchForm').submit(function(event) {
 
            event.preventDefault();
+           $("#google-results-div").html("");
+           $("#processed-results-div").html("");
            //We do need to find away to remove these from here
            var apiKey2 = "AIzaSyDZjrXVfbGRsUIZpOpB_I9BkIkIhQWoJ_Y";
            var apiKey = "AIzaSyBOeLl5E9RSrKA0QpWFuF3F91n4rmcPz8o"
@@ -50,7 +52,7 @@
            //because Google's API wouldn't have it any other way
            var getRequests = [];
            for (var i = 0; i < nbPages; i++) {
-               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey2 + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
+               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
 
                getRequests.
                push($.getJSON(getQueryResultJsonUrl, function(data) {
@@ -72,7 +74,9 @@
 
                postRequest.success(function(formattedResults) {
                    console.log(formattedResults);
-                   renderProcessedResults(formattedResults);
+                   renderResults(formattedResults,"google-results-div");
+                   renderResults(formattedResults,"processed-results-div");
+
                });
 
                //TODO : Ask server to send processed results. Display processed results.
@@ -116,17 +120,17 @@
        }
    }
 
-   function renderProcessedResults(processedResults) {
+   function renderResults(resultSet, divID) {
        var pageContainer = $('<div>', {
            class: 'pageContainer'
        });
-       var processedResultsDiv = $("#processed-results-div");
-       for (var i = 0; i < processedResults.results.length; i++) {
+       var resultsDiv = $("#"+divID);
+       for (var i = 0; i < resultSet.results.length; i++) {
            // Creating a new result object and firing its toString method:
-           pageContainer.append(new result(processedResults.results[i]) + '');
+           pageContainer.append(new result(resultSet.results[i]) + '');
        }
        pageContainer.append('<div class="clear"></div>')
-           .hide().appendTo(processedResultsDiv)
+           .hide().appendTo(resultsDiv)
            .fadeIn('slow');
    }
 
