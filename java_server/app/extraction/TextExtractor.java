@@ -21,7 +21,9 @@ public class TextExtractor {
 	public static final String extensionFile = ".resultsearch";
 
 	public static void main(String[] args){
-		extractDataFromJson(JSON_SAMPLE);
+		//extractDataFromJson(JSON_SAMPLE);
+		DBpediaPrefixSearch dp = new DBpediaPrefixSearch(5);
+		System.out.print(dp.getAutoCompletionList("java"));
 	}
 
 	public static void extractDataFromJson (String json){
