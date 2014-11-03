@@ -4,10 +4,26 @@
               appendTo: ".input-group" ,
                delay: 0, 
               autoFocus: true,        
-              source: "/suggestions",
+              source: function(request, response){
+                 $.ajax({
+                    url: "http://lookup.dbpedia.org/api/search/PrefixSearch",
+                    dataType: "json",
+                    data: {
+                      QueryClass:"",
+                      MaxHits: 5,
+                      QueryString: request.term
+                    },
+                  success: function( data ) {
+                    var suggestions = [];
+                    for (i in data.results)
+                      suggestions.push(data.results[i].label);
+                    response( suggestions );
+                  }
+        });
+
+
+              },
               minLength: 2,
-
-
        });
 
 
@@ -113,4 +129,7 @@
            .hide().appendTo(processedResultsDiv)
            .fadeIn('slow');
    }
+
+
+
 
