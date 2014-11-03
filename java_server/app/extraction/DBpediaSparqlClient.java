@@ -28,7 +28,7 @@ public class DBpediaSparqlClient {
 		client = new HttpClient();
 	}	
 	
-	public void writeAllJsonFiles()
+	public void writeAllRdfFiles()
 	{
 		File input = new File(""); //Fichier non annote
         File output = new File(""); //Fichier annote

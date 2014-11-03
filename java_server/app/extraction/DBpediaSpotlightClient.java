@@ -109,6 +109,6 @@ public class DBpediaSpotlightClient extends AnnotationClient {
 //         lc.writeConceptFromQuery("berlin");
          
          DBpediaSparqlClient sparql=new DBpediaSparqlClient();
-         sparql.writeAllJsonFiles(); 
+         sparql.writeAllRdfFiles(); 
     }
 }

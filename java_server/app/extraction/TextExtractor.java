@@ -24,14 +24,15 @@ public class TextExtractor {
 		extractDataFromJson(JSON_SAMPLE);
 	}
 
-	public static void extractDataFromJson (String json){
+	public static JsonModel.WebSearch extractDataFromJson (String json){
 		JsonReader reader = new JsonReader(new StringReader(json));
 		JsonParser parser = new JsonParser();
+		JsonModel.WebSearch result = null;
 		try {
 			reader.setLenient(true);
 
 			if(reader.hasNext()){
-				parse(parser.parse(reader));
+				result = parse(parser.parse(reader));
 			}
 		} catch (IOException e) {
 		} catch (IllegalStateException e){
@@ -44,13 +45,14 @@ public class TextExtractor {
 				}
 			}
 		}
+		return result;
 	}
 
 	/**
 	 * Parse Json and save website content into files
 	 * @param element JSonElement
 	 */
-	public static void parse(JsonElement element) {
+	public static JsonModel.WebSearch parse(JsonElement element) {
 		JsonModel.WebSearch webSearch = new Gson().fromJson(element, JsonModel.WebSearch.class);
 		for(JsonModel.WebPagesItem webPagesListItem : webSearch.result){
 			String bodyFromUrl = extractBodyTextFromUrl(webPagesListItem.url);
@@ -58,6 +60,7 @@ public class TextExtractor {
 				saveTextIntoFile(webSearch.search,webSearch.searchEngine, webPagesListItem.url, bodyFromUrl);       				
 			}
 		}
+		return webSearch;
 	}
 
 	/**
