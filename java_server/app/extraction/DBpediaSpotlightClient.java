@@ -23,15 +23,18 @@ public class DBpediaSpotlightClient extends AnnotationClient {
 	@Override
 	public List<String> extract(String text) {
 		String spotlightResponse;
+		
+		if(text.length() > 10000){
+			text = text.substring(0, 10000);
+		}
+		
 		try {
-			System.out.println("Launch Spotlight WS");
 			GetMethod getMethod = new GetMethod(API_URL + "rest/annotate/?" +
 					"confidence=" + CONFIDENCE
 					+ "&support=" + SUPPORT
 					+ "&text=" + URLEncoder.encode(text, "utf-8"));
 			getMethod.addRequestHeader(new Header("Accept", "application/json"));
 			spotlightResponse = request(getMethod);
-			System.out.println("Finish Spotlight WS");
 		} catch (Exception e) {
 			return null;
 		}
@@ -55,60 +58,45 @@ public class DBpediaSpotlightClient extends AnnotationClient {
 		return resources;
 	}
 
-	public void writeTextConcepts()
-	{
+	public static void writeTextConcepts(String query) {
 		File input = new File(""); //Fichier non annote
 		File output = new File(""); //Fichier annote
 
-		File folder = new File("tmp");
-		File[] queries = folder.listFiles();
+		File folder = new File("tmp/"+query);
 
-		for( int i=0; i<queries.length; i++)
+		if(folder.isDirectory())
 		{
-			if(queries[i].isDirectory())
+			File[] searchEngines=folder.listFiles();
+			for(int j=0; j< searchEngines.length; j++)
 			{
-				File[] searchEngines=queries[i].listFiles();
-				for(int j=0; j< searchEngines.length; j++)
+				if(searchEngines[j].isDirectory())
 				{
-					if(searchEngines[j].isDirectory())
+					File[] filesToParse=searchEngines[j].listFiles(new FilenameFilter() {									
+						@Override
+						public boolean accept(File dir, String name) {
+							return name.endsWith(".resultsearch");
+						}
+					});
+					for(int k=0; k<filesToParse.length; k++)
 					{
-						File[] filesToParse=searchEngines[j].listFiles(new FilenameFilter() {									
-							@Override
-							public boolean accept(File dir, String name) {
-								return name.endsWith(".resultsearch");
-							}
-						});
-						for(int k=0; k<filesToParse.length; k++)
-						{
-							input = filesToParse[k];
-							output = new File(filesToParse[k].getPath().replace(".resultsearch",".dbpedia"));
-							try {
-								evaluate(input, output);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
+						input = filesToParse[k];
+						output = new File(filesToParse[k].getPath().replace(".resultsearch",".dbpedia"));
+						try {
+							DBpediaSpotlightClient client = new DBpediaSpotlightClient();
+							client.evaluate(input, output);
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 					}
 				}
-
-
 			}
 		} 
 	}
 
 	public static void main(String[] args) throws Exception {
-		DBpediaSpotlightClient sc = new DBpediaSpotlightClient ();
+		
+		DBpediaSpotlightClient.writeTextConcepts("Mental disorder");
 
-		//Research of concepts linked to Berlin
-		DBpediaLookupClient lc= new DBpediaLookupClient("berlin"); 
-
-		//Writing of concepts linked to the results of search motors queries
-		sc.writeTextConcepts();
-
-		//Writing of concepts linked to Berlin (found just before)
-		lc.writeConceptFromQuery("berlin");
-
-
-
+	
 	}
 }

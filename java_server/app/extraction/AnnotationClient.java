@@ -17,16 +17,23 @@ package extraction;
  */
 
 
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
-
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 
 /**
  * This class has been translate to scala. Please use the AnnotationClientScala.scala for new External Clients!
@@ -114,35 +121,7 @@ public abstract class AnnotationClient {
 		int i=0;
 		int correct =0 ;
 		int error = 0;
-		// int sum = 0;
-//		for (String snippet: text.split("\n")) {
-//			String s = parser.parse(snippet);
-//			if (s!= null && !s.equals("")) {
-//				i++;
-//
-//				if (i<restartFrom) continue;
-//
-//				List<String> entities = new ArrayList<String>();
-//				try {
-//					//   final long startTime = System.nanoTime();
-//					entities = extract(snippet.replaceAll("\\s+"," "));
-//					//   final long endTime = System.nanoTime();
-//					// sum += endTime - startTime;
-//					// LOG.info(String.format("(%s) Extraction ran in %s ns.", i, endTime - startTime));
-//					correct++;
-//				} catch (Exception e) {
-//					error++;
-//					e.printStackTrace();
-//				}
-//				if(entities != null){
-//					for (String e: entities) {
-//						out.println("http://dbpedia.org/resource/"+e);
-//					}					
-//				}
-//				out.println();
-//				out.flush();
-//			}
-//		}
+		
 		String s = parser.parse(text);
 		if (s!= null && !s.equals("")) {
 			i++;
@@ -161,7 +140,7 @@ public abstract class AnnotationClient {
 			}
 			if(entities != null){
 				for (String e: entities) {
-					out.println("http://dbpedia.org/resource/"+e);
+					out.println(e);
 				}					
 			}
 			out.println();

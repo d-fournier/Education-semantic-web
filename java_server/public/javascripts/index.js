@@ -41,7 +41,9 @@
            var apiKey2 = "AIzaSyDZjrXVfbGRsUIZpOpB_I9BkIkIhQWoJ_Y";
            var apiKey = "AIzaSyBOeLl5E9RSrKA0QpWFuF3F91n4rmcPz8o";
            var apiKey3= "AIzaSyC1ykvZWHr4EHY29MXjPoMo2_3g34liVEQ";
+
            var apiKey4 = "AIzaSyCbU-dPDGLG3lBZC6q8M81mwJJLAMptCXE";
+
            var cx = '016813502462276054558:2encdk-x_ka';
            var searchTerms = $('#searchTerms').val();
 
@@ -59,6 +61,7 @@
            //because Google's API wouldn't have it any other way
            var getRequests = [];
            for (var i = 0; i < nbPages; i++) {
+
                var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey4 + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
 
                getRequests.

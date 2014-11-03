@@ -10,8 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.Exception;
-
 
 public class DBpediaPrefixSearch extends AnnotationClient{
 	
