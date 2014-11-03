@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-
-import extraction.JsonModel;
 
 public class DbpediaParser {
 

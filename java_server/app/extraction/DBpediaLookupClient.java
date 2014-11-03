@@ -54,29 +54,6 @@ public class DBpediaLookupClient extends DefaultHandler {
 	}
 
 
-
-	/**
-	 * Writes the concepts linked to the query in a file
-	 * @param q query which we want to look for the linked concepts (used for the name of the file)
-	 */
-	public void writeConceptFromQuery(String q)
-	{
-		FileOutputStream fos;
-		try {
-			fos = new FileOutputStream("tmp/"+q+"/"+q+".concept");
-			DBpediaLookupClient dbLookup= new DBpediaLookupClient(q);
-			List<Map<String, String>> resultList=dbLookup.variableBindings();
-			for(Map<String,String> map : resultList)
-			{
-				fos.write((map.get("URI")+"\n").getBytes());
-			}
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-
 	/**Methods to parse the results of the query to DbPedia
 	 * 
 	 */
@@ -117,6 +94,7 @@ public class DBpediaLookupClient extends DefaultHandler {
 	public List<Map<String, String>> variableBindings() {
 		return variableBindings;
 	}
+	
 	private boolean containsSearchTerms(Map<String, String> bindings) {
 		StringBuilder sb = new StringBuilder();
 		for (String value : bindings.values()) sb.append(value);  // do not need white space
@@ -130,5 +108,25 @@ public class DBpediaLookupClient extends DefaultHandler {
 		return true;
 	}
 
+	/**
+	 * Writes the concepts linked to the query in a file
+	 * @param q query which we want to look for the linked concepts (used for the name of the file)
+	 */
+	public static void writeConceptFromQuery(String q)
+	{
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream("tmp/"+q+"/"+q+".concept");
+			DBpediaLookupClient dbLookup= new DBpediaLookupClient(q);
+			List<Map<String, String>> resultList=dbLookup.variableBindings();
+			for(Map<String,String> map : resultList)
+			{
+				fos.write((map.get("URI")+"\n").getBytes());
+			}
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
 

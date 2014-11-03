@@ -17,9 +17,9 @@ import java.util.LinkedHashMap;
 
 public class RankingWithJaccard {
 
-	private static String extensionDbpedia = "dbpedia";
-	private static String extensionConceptForSearch = "concept";
-	private static String actualPath = "E:\\GitHub\\semantic_web\\java_project\\tmp\\";
+	private static String DBPEDIA_EXTENSION = "dbpedia";
+	private static String CONCEPT_EXTENSION = "concept";
+	private static String TMP_PATH = "tmp\\";
 
 	public static void main(String[] args) {
 		Map<String, Double> ranking = attributeAJaccardMark("berlin");
@@ -36,24 +36,23 @@ public class RankingWithJaccard {
 	 * Return the ranking with a map containing the websites and their Jaccard values between 
 	 * their concepts and the concepts of the user request
 	 */
-	private static Map<String, Double> attributeAJaccardMark(String userRequest){
+	public static Map<String, Double> attributeAJaccardMark(String userRequest){
 
 		Map <String, Double> jaccardMap = new HashMap<>();
 
-		actualPath += userRequest;
+		TMP_PATH += userRequest;
 		String [] listOfSearchEngineForOneSearch;
 		List <String> list_dbpediaPathName = new ArrayList<>();
 
 		// Retrieve all Browsers folder
-		listOfSearchEngineForOneSearch = retrieveSearchEngineFolderForOneRequest(actualPath);
+		listOfSearchEngineForOneSearch = retrieveSearchEngineFolderForOneRequest(TMP_PATH);
 
 		// Retrieve all Sites folders in each Browser folder
-		list_dbpediaPathName = getAllDbpediaPathName(actualPath, listOfSearchEngineForOneSearch);
+		list_dbpediaPathName = getAllDbpediaPathName(TMP_PATH, listOfSearchEngineForOneSearch);
 
 		// Retrieve file .concept
-		String conceptPathName = actualPath;
-		conceptPathName = retrieveConceptForTheSearch(actualPath);
-		System.out.println("Concept Path Name : " + conceptPathName);
+		String conceptPathName = TMP_PATH;
+		conceptPathName = retrieveConceptForTheSearch(TMP_PATH);
 
 		// Read .concept
 		File file = new File(conceptPathName);
@@ -88,16 +87,7 @@ public class RankingWithJaccard {
 			Double resultat = new Double(res);
 			jaccardMap.put(website, resultat);
 		}
-
-		System.out.println("----------------");
-		System.out.println("############## Classement non classé ##############");
-		for (Map.Entry<String, Double> entry : jaccardMap.entrySet()) {
-			System.out.println("[Key] : " + entry.getKey() 
-                                      + " [Value] : " + entry.getValue());
-		}
-		System.out.println("################# Fin Classement #############");
-		System.out.println("----------------");
-		
+	
 		// Ranking
 		return sortMapByValues(jaccardMap);
 	}
@@ -145,10 +135,6 @@ public class RankingWithJaccard {
 		// For each SearchEngine
 		for( String searchEngine : listOfSearchEngine){
 
-			System.out.println("----------------");
-			System.out.println("Moteur de recherche : "+searchEngine);
-			System.out.println("----------------");
-
 			String actualPathInEachSearchEngine = actualP+"\\"+searchEngine;
 			File actualFileInEachBrowser = new File(actualPathInEachSearchEngine);
 
@@ -159,12 +145,9 @@ public class RankingWithJaccard {
 				String pathFileNameDbpedia = new String(actualPathInEachSearchEngine);
 				String extensionFiles = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-				if (extensionFiles.equals(extensionDbpedia)){
+				if (extensionFiles.equals(DBPEDIA_EXTENSION)){
 					pathFileNameDbpedia += "\\" + fileName;
-					System.out.println("%%%%%%%%% DbPedia %%%%%%%% : " + pathFileNameDbpedia);
 					list_dbpediaPathName.add(pathFileNameDbpedia);
-				} else {
-					System.out.println(fileName);
 				}
 			}
 		}
@@ -180,9 +163,8 @@ public class RankingWithJaccard {
 
 			String extensionFiles = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-			if (extensionFiles.equals(extensionConceptForSearch)){
+			if (extensionFiles.equals(CONCEPT_EXTENSION)){
 				pathFileNameConcept += "\\" + fileName;
-				System.out.println("%%%%%%%%% Concept %%%%%%%% : " + pathFileNameConcept);
 				return pathFileNameConcept;
 			}
 		}
