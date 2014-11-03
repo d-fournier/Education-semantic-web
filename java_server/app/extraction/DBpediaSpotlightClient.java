@@ -2,7 +2,6 @@ package extraction;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
