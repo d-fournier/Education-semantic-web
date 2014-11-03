@@ -1,30 +1,23 @@
 package controllers;
 
-import org.json.JSONObject;
-
-import play.api.mvc.Content;
-import play.libs.Json;
-
 import jaccard.RankingWithJaccard;
 
 import java.util.Map;
-
-import akka.serialization.Serialization.Information;
-
-import com.google.gson.Gson;
 
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
+
+import com.google.gson.Gson;
+
 import extraction.DBpediaLookupClient;
+import extraction.DBpediaPrefixSearch;
 import extraction.DBpediaSparqlClient;
 import extraction.DBpediaSpotlightClient;
 import extraction.InformationExtractor;
 import extraction.TextExtractor;
 import extraction.WebSearch;
-
-import extraction.DBpediaPrefixSearch;
 
 public class Application extends Controller {
 
