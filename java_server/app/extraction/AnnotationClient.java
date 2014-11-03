@@ -160,7 +160,7 @@ public abstract class AnnotationClient {
 			}
 			if(entities != null){
 				for (String e: entities) {
-					out.println("http://dbpedia.org/resource/"+e);
+					out.println(e);
 				}					
 			}
 			out.println();
