@@ -3,9 +3,9 @@ package extraction;
 public class JsonModel {
 
 	public class WebSearch{
-	    public String search;
+	    public String searchTerms;
 	    public String searchEngine;
-	    public WebPagesItem[] result;
+	    public WebPagesItem[] results;
 	}
 	
 	public class WebPagesItem {

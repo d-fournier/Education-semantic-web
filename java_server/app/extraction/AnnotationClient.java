@@ -113,35 +113,7 @@ public abstract class AnnotationClient {
 		int i=0;
 		int correct =0 ;
 		int error = 0;
-		// int sum = 0;
-//		for (String snippet: text.split("\n")) {
-//			String s = parser.parse(snippet);
-//			if (s!= null && !s.equals("")) {
-//				i++;
-//
-//				if (i<restartFrom) continue;
-//
-//				List<String> entities = new ArrayList<String>();
-//				try {
-//					//   final long startTime = System.nanoTime();
-//					entities = extract(snippet.replaceAll("\\s+"," "));
-//					//   final long endTime = System.nanoTime();
-//					// sum += endTime - startTime;
-//					// LOG.info(String.format("(%s) Extraction ran in %s ns.", i, endTime - startTime));
-//					correct++;
-//				} catch (Exception e) {
-//					error++;
-//					e.printStackTrace();
-//				}
-//				if(entities != null){
-//					for (String e: entities) {
-//						out.println("http://dbpedia.org/resource/"+e);
-//					}					
-//				}
-//				out.println();
-//				out.flush();
-//			}
-//		}
+		
 		String s = parser.parse(text);
 		if (s!= null && !s.equals("")) {
 			i++;
