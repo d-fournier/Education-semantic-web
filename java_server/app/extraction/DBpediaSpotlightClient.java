@@ -95,20 +95,20 @@ public class DBpediaSpotlightClient extends AnnotationClient {
 			}
 		} 
 	}
-
-	public static void main(String[] args) throws Exception {
-		DBpediaSpotlightClient sc = new DBpediaSpotlightClient ();
-
-		//Research of concepts linked to Berlin
-		DBpediaLookupClient lc= new DBpediaLookupClient("berlin"); 
-
-		//Writing of concepts linked to the results of search motors queries
-		sc.writeTextConcepts();
-
-		//Writing of concepts linked to Berlin (found just before)
-		lc.writeConceptFromQuery("berlin");
-
-
-
-	}
+	
+    public static void main(String[] args) throws Exception {
+//        DBpediaSpotlightClient sc = new DBpediaSpotlightClient ();
+        
+        //Research of concepts linked to Berlin
+//        DBpediaLookupClient lc= new DBpediaLookupClient("berlin"); 
+        
+        //Writing of concepts linked to the results of search motors queries
+//         sc.writeTextConcepts();
+         
+         //Writing of concepts linked to Berlin (found just before)
+//         lc.writeConceptFromQuery("berlin");
+         
+         DBpediaSparqlClient sparql=new DBpediaSparqlClient();
+         sparql.writeAllJsonFiles(); 
+    }
 }
