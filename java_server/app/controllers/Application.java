@@ -50,6 +50,7 @@ public class Application extends Controller {
 			System.out.println("Create n-triplets for Websites for query : "+request.searchTerms);
 			DBpediaSparqlClient.writeAllRdfFiles(request.searchTerms); 
 			
+			System.out.println("Rank for query : "+request.searchTerms);			
 			Map<String, Double> ranking = RankingWithJaccard.attributeAJaccardMark(request.searchTerms);
 
 			WebSearch result = new WebSearch();
@@ -62,7 +63,7 @@ public class Application extends Controller {
 				i++;
 			}	
 			String webServiceResult = new Gson().toJson(result);
-			
+			System.out.println("End for query : "+request.searchTerms);
 			return ok(webServiceResult);
 
 		}

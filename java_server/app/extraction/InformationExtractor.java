@@ -4,8 +4,7 @@ public class InformationExtractor {
 
 	public static WebSearch.WebPagesItem findInfoFromFile(WebSearch request, String filename){
 		for(WebSearch.WebPagesItem item : request.results){
-			String convertedURL = item.url.replaceAll("\"", "_");
-			convertedURL = convertedURL.replaceAll("/", "_");
+			String convertedURL = TextExtractor.getStringFromUrl(item.url);
 
 			if(convertedURL.equals(filename)){
 				return item;				

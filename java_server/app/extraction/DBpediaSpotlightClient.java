@@ -23,6 +23,11 @@ public class DBpediaSpotlightClient extends AnnotationClient {
 	@Override
 	public List<String> extract(String text) {
 		String spotlightResponse;
+		
+		if(text.length() > 10000){
+			text = text.substring(0, 10000);
+		}
+		
 		try {
 			GetMethod getMethod = new GetMethod(API_URL + "rest/annotate/?" +
 					"confidence=" + CONFIDENCE
@@ -89,18 +94,9 @@ public class DBpediaSpotlightClient extends AnnotationClient {
 	}
 
 	public static void main(String[] args) throws Exception {
-		//        DBpediaSpotlightClient sc = new DBpediaSpotlightClient ();
+		
+		DBpediaSpotlightClient.writeTextConcepts("Mental disorder");
 
-		//Research of concepts linked to Berlin
-		//        DBpediaLookupClient lc= new DBpediaLookupClient("berlin"); 
-
-		//Writing of concepts linked to the results of search motors queries
-		//         sc.writeTextConcepts();
-
-		//Writing of concepts linked to Berlin (found just before)
-		//         lc.writeConceptFromQuery("berlin");
-
-		DBpediaSparqlClient sparql=new DBpediaSparqlClient();
-		sparql.writeAllRdfFiles("berlin"); 
+	
 	}
 }
