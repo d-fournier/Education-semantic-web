@@ -1,43 +1,44 @@
 @main("Swagify your search") {
-
- 		<div id="page">
-                <h1>Swaggy Search for Semantic Web search</h1>
-                    
-                        <form id="searchForm">
-                            <div class="input-group">
-                                <input id="searchTerms" type="text" name="query" />
-                                <input type="submit" value="Submit" id="submitButton" disabled = "true" />
-                            </div>
-                        </form>
-                    
-            </div>
-                
-            
+<div id="page">
+    <h1>Swaggy Search for Semantic Web search</h1>
+    
+    <form id="searchForm">
+        <div class="input-group">
+            <input id="searchTerms" type="text" name="query" />
+            <input type="submit" value="Submit" id="submitButton" disabled = "true" />
+        </div>
+        <div id="searchInContainer">
+            <input type="radio" name="check" value="simpleListCompare" id="simpleCompare" checked />
+            <label for="simple-compare">Simple comparison</label>
+            <input type="radio" name="check" value="rdfGraphCompare" id="rdfCompare" />
+            <label for="rdf-compare">RDF Graph based comparison</label>
+        </div>
+    </form>
+    
+</div>
 <div class="centered">
-<table>
-     <thead>
-        <th class="table-head">
-            Google Results
-        </th>
-        <th class="table-head">
-            Processed Resullts
-        </th>
-    </thead>
-    <tr>
-        <td>
-            <div id="google-results-div"></div>
-        </td>
-        <td>
-            <div id="processed-results-div"></div>
-        </td>
-    
-    </tr>
-</table>
-<div class="col-md-12 spinner">
-<i class="fa fa-spinner fa-spin fa-4x"></i>
+    <table>
+        <thead>
+            <th class="table-head">
+                Google Results
+            </th>
+            <th class="table-head">
+                Processed Resullts
+            </th>
+        </thead>
+        <tr>
+            <td>
+                <div id="google-results-div"></div>
+            </td>
+            <td>
+                <div id="processed-results-div"></div>
+            </td>
+            
+        </tr>
+    </table>
+    <div class="col-md-12 spinner">
+        <i class="fa fa-spinner fa-spin fa-4x"></i>
+    </div>
 </div>
-</div>
-    <p class="credit"><a href="http://tutorialzine.com/2010/09/google-powered-site-search-ajax-jquery/">Powered by H4304 &amp; Google Custom Search</a></p>
-
-    
+<p class="credit"><a href="http://tutorialzine.com/2010/09/google-powered-site-search-ajax-jquery/">Powered by H4304 &amp; Google Custom Search</a></p>
 }

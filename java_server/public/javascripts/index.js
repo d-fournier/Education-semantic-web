@@ -1,42 +1,50 @@
    $(document).ready(function() {
 
-    $(".table-head").each(function(){
-          $(this).hide();
+
+       var postGoogleResultsURL = $("#simpleCompare").val(); // Determined according to the checked radio button
+       $("#rdfCompare,#simpleCompare").change(function() {
+           // Listening for a click on one of the radio buttons.
+           //Update the post URL accordingly
+           postGoogleResultsURL = "/"+this.value;
        });
-    $(".spinner").hide();
+
+       $(".table-head").each(function() {
+           $(this).hide();
+       });
+       $(".spinner").hide();
 
        $("#searchTerms").autocomplete({
-              appendTo: ".input-group" ,
-               delay: 0, 
-              autoFocus: true,        
-              source: function(request, response){
-                 $.ajax({
-                    url: "http://lookup.dbpedia.org/api/search/PrefixSearch",
-                    dataType: "json",
-                    data: {
-                      QueryClass:"",
-                      MaxHits: 5,
-                      QueryString: request.term
-                    },
-                  success: function( data ) {
-                    var suggestions = [];
-                    for (i in data.results)
-                      suggestions.push(data.results[i].label);
-                    response( suggestions );
-                  }
-        });
-   
-       $( "#searchTerms" ).autocomplete({
-select: function( event, ui ) {
-  $("#submitButton").prop("disabled",false).css("cursor","pointer");
+           appendTo: ".input-group",
+           delay: 0,
+           autoFocus: true,
+           source: function(request, response) {
+               $.ajax({
+                   url: "http://lookup.dbpedia.org/api/search/PrefixSearch",
+                   dataType: "json",
+                   data: {
+                       QueryClass: "",
+                       MaxHits: 10,
+                       QueryString: request.term
+                   },
+                   success: function(data) {
+                       var suggestions = [];
+                       for (i in data.results)
+                           suggestions.push(data.results[i].label);
+                       response(suggestions);
+                   }
+               });
+
+               $("#searchTerms").autocomplete({
+                   select: function(event, ui) {
+                       $("#submitButton").prop("disabled", false).css("cursor", "pointer");
 
 
-}
-});
+                   }
+               });
 
 
-              },
-              minLength: 2,
+           },
+           minLength: 2,
        });
 
 
@@ -47,18 +55,18 @@ select: function( event, ui ) {
            $("#processed-results-div").html("");
 
            //can't do anything now
-           
-             $("#searchTerms").prop("disabled",true);
-             $("#submitButton").prop("disabled",false).css("cursor","not-allowed");
-             $(".spinner").show();
-              $(".table-head").each(function(){
-              $(this).hide();
-              });
-          
+
+           $("#searchTerms").prop("disabled", true);
+           $("#submitButton").prop("disabled", false).css("cursor", "not-allowed");
+           $(".spinner").show();
+           $(".table-head").each(function() {
+               $(this).hide();
+           });
+
            //We do need to find away to remove these from here
            var apiKey2 = "AIzaSyDZjrXVfbGRsUIZpOpB_I9BkIkIhQWoJ_Y";
            var apiKey = "AIzaSyBOeLl5E9RSrKA0QpWFuF3F91n4rmcPz8o";
-           var apiKey3= "AIzaSyC1ykvZWHr4EHY29MXjPoMo2_3g34liVEQ";
+           var apiKey3 = "AIzaSyC1ykvZWHr4EHY29MXjPoMo2_3g34liVEQ";
 
            var apiKey4 = "AIzaSyCbU-dPDGLG3lBZC6q8M81mwJJLAMptCXE";
 
@@ -88,6 +96,9 @@ select: function( event, ui ) {
                }));
            }
 
+
+
+
            //wait for the get request to be properly completed
            $.when.apply($, getRequests).then(function() {
 
@@ -96,22 +107,22 @@ select: function( event, ui ) {
                    type: "POST",
                    dataType: 'json',
                    data: JSON.stringify(formattedJSON),
-                   url: "/rdfGraphCompare",
+                   url: postGoogleResultsURL,
 
                });
 
                postRequest.success(function(formattedResults) {
                    console.log(formattedResults);
-                   renderResults(formattedJSON,"google-results-div");
-                   renderResults(formattedResults,"processed-results-div");
-                    $("#searchTerms").prop("disabled", false);
-                    $(".spinner").hide();
+                   renderResults(formattedJSON, "google-results-div");
+                   renderResults(formattedResults, "processed-results-div");
+                   $("#searchTerms").prop("disabled", false);
+                   $(".spinner").hide();
 
                });
 
-               postRequest.error(function( jqXHR,textStatus,errorThrown){
+               postRequest.error(function(jqXHR, textStatus, errorThrown) {
                    $("#searchTerms").prop("disabled", false);
-                    $(".spinner").hide();
+                   $(".spinner").hide();
                });
 
                //TODO : Ask server to send processed results. Display processed results.
@@ -142,29 +153,46 @@ select: function( event, ui ) {
 
    function result(r) {
        //Class definition for a processed result
-
-       var arr = [
+       var arr;
+       if (r.id == null)
+       { // Google Results
+           arr = [
            '<div class="webResult">',
            '<h2><a href="http://', r.url, '">', r.title, '</a></h2>',
            '<p>', r.description, '</p>',
            '<a href="http://', r.url, '">', r.url, '</a>',
            //Could add the relevant concepts discovered when processing.
            '</div>'
-       ];
+       ] 
+
+       }
+       else{ // Processed results
+
+         arr = [
+           '<div class="webResult">',
+           '<h2><a href="http://', r.url, '">', r.title, '</a></h2>',
+           '<p>', r.description, '</p>',
+           '<p> Rank of this result in the Google Search :', r.id+1,'</p>',
+           '<a href="http://', r.url, '">', r.url, '</a>',
+           //Could add the relevant concepts discovered when processing.
+           '</div>'
+       ] 
+       }
+
        this.toString = function() {
            return arr.join('');
        }
    }
 
    function renderResults(resultSet, divID) {
-     $(".table-head").each(function(){
-          $(this).show();
+       $(".table-head").each(function() {
+           $(this).show();
        });
 
        var pageContainer = $('<div>', {
            class: 'pageContainer'
        });
-       var resultsDiv = $("#"+divID);
+       var resultsDiv = $("#" + divID);
        for (var i = 0; i < resultSet.results.length; i++) {
            // Creating a new result object and firing its toString method:
            pageContainer.append(new result(resultSet.results[i]) + '');
@@ -173,7 +201,3 @@ select: function( event, ui ) {
            .hide().appendTo(resultsDiv)
            .fadeIn('slow');
    }
-
-
-
-
