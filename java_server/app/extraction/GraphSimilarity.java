@@ -79,33 +79,17 @@ public class GraphSimilarity {
 		}
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		boolean b = true;
 		// lire le fichier RDF
-		while(b)
-		{
+		boolean finished = false;
+		while(!finished){
 			try{
-				model.read(br,null, "N-TRIPLE");
-				b=false;
+				model.read(br,null,"N-TRIPLE");
+				finished = true;
 			} catch(RiotException e)
 			{
-				try {
-					String errorLine = e.getMessage().substring(e.getMessage().indexOf(":")+2, e.getMessage().indexOf(","));
-					in = FileManager.get().open( inputFileName );
-					br = new BufferedReader(new InputStreamReader(in));
-					for(int i=0; i<Integer.parseInt(errorLine);i++)
-					{
-						br.readLine();
-					}
-					br.readLine();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
+				return null;
+			}		
 		}
-
-
-
 
 		return model;
 		// l'écrire sur la sortie standard
@@ -118,6 +102,7 @@ public class GraphSimilarity {
 
 	public static void main(String[] args)
 	{
+		DBpediaSparqlClient.writeAllRdfFiles("berlin");
 		GraphSimilarity.sortGraphs();
 	}
 }

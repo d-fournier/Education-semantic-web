@@ -24,7 +24,6 @@ public class DbpediaParser {
 				result = new Gson().fromJson(parser.parse(reader), Dbpedia_sparql.class);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			if (reader != null) {
 				try {

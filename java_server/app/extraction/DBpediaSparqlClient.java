@@ -21,6 +21,8 @@ import dbpedia.DbpediaParser.Triplet;
 
 public class DBpediaSparqlClient {
 
+	public static final String LITTERAL = "literal";
+
 	private static String executeQuery(List<String> resources)
 	{
 		if(resources.size() == 0){
@@ -86,9 +88,12 @@ public class DBpediaSparqlClient {
 								Dbpedia_sparql result = DbpediaParser.parseText(response);
 								if(result != null){
 									for(Triplet t : result.results.bindings){
-										fos.write(("<"+t.s.value+"> ").getBytes());
-										fos.write(("<"+t.p.value+"> ").getBytes());
-										fos.write(("<"+t.o.value+"> \n").getBytes());
+
+										if(!t.s.type.equals(LITTERAL) && !t.p.type.equals(LITTERAL) && !t.o.type.equals(LITTERAL)) {
+											fos.write(("<"+t.s.value+"> ").getBytes());
+											fos.write(("<"+t.p.value+"> ").getBytes());
+											fos.write(("<"+t.o.value+"> .\n").getBytes());
+										}
 									}
 								}
 
