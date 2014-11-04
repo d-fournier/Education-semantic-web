@@ -6,11 +6,15 @@ public class WebSearch{
 	    public String searchEngine;
 	    public WebPagesItem[] results;
 	
-	
-	public static class WebPagesItem {
+		public static class WebPagesItem {
 	    public String title;
 	    public String url;
 	    public String description;
+	    /**
+	     * Does not exist in JSON, just for output
+	     */
+	    public int id;
+	    public int[] idSimilarWebsite;
 	}
 	
 }

@@ -116,7 +116,7 @@ public class DBpediaLookupClient extends DefaultHandler {
 	{
 		FileOutputStream fos;
 		try {
-			fos = new FileOutputStream("tmp/"+q+"/"+q+".concept");
+			fos = new FileOutputStream("tmp/"+q+"/"+q+".dbpedia");
 			DBpediaLookupClient dbLookup= new DBpediaLookupClient(q);
 			List<Map<String, String>> resultList=dbLookup.variableBindings();
 			for(Map<String,String> map : resultList)
