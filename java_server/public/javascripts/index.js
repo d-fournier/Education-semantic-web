@@ -3,6 +3,7 @@
     $(".table-head").each(function(){
           $(this).hide();
        });
+    $(".spinner").hide();
 
        $("#searchTerms").autocomplete({
               appendTo: ".input-group" ,
@@ -24,6 +25,14 @@
                     response( suggestions );
                   }
         });
+   
+       $( "#searchTerms" ).autocomplete({
+select: function( event, ui ) {
+  $("#submitButton").prop("disabled",false).css("cursor","pointer");
+
+
+}
+});
 
 
               },
@@ -36,6 +45,15 @@
            event.preventDefault();
            $("#google-results-div").html("");
            $("#processed-results-div").html("");
+
+           //can't do anything now
+           
+             $("#searchTerms").prop("disabled",true);
+             $("#submitButton").prop("disabled",false).css("cursor","not-allowed");
+             $(".spinner").show();
+              $(".table-head").each(function(){
+              $(this).hide();
+              });
           
            //We do need to find away to remove these from here
            var apiKey2 = "AIzaSyDZjrXVfbGRsUIZpOpB_I9BkIkIhQWoJ_Y";
@@ -86,7 +104,14 @@
                    console.log(formattedResults);
                    renderResults(formattedJSON,"google-results-div");
                    renderResults(formattedResults,"processed-results-div");
+                    $("#searchTerms").prop("disabled", false);
+                    $(".spinner").hide();
 
+               });
+
+               postRequest.error(function( jqXHR,textStatus,errorThrown){
+                   $("#searchTerms").prop("disabled", false);
+                    $(".spinner").hide();
                });
 
                //TODO : Ask server to send processed results. Display processed results.
@@ -94,6 +119,7 @@
 
 
        });
+
    });
 
    function formatJSON(rawResponseJSON, formattedJSON) {
