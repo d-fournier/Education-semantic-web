@@ -84,7 +84,7 @@
 
                postRequest.success(function(formattedResults) {
                    console.log(formattedResults);
-                   renderResults(formattedResults,"google-results-div");
+                   renderResults(formattedJSON,"google-results-div");
                    renderResults(formattedResults,"processed-results-div");
 
                });
