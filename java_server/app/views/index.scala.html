@@ -6,7 +6,13 @@
     <form id="searchForm">
         <div class="input-group">
             <input id="searchTerms" type="text" name="query" />
-            <input type="submit" value="Submit" id="submitButton" disabled="true" />
+            <input type="submit" value="Submit" id="submitButton" disabled = "true" />
+        </div>
+        <div id="searchInContainer">
+            <input type="radio" name="check" value="simpleListCompare" id="simpleCompare" checked />
+            <label for="simple-compare">Simple comparison</label>
+            <input type="radio" name="check" value="rdfGraphCompare" id="rdfCompare" />
+            <label for="rdf-compare">RDF Graph based comparison</label>
         </div>
     </form>
 
@@ -37,7 +43,8 @@
 <div class="text-center">
     <p class="credit"><a href="http://google.com">Powered by H4304 &amp; Google Custom Search</a>
     </p>
-</div>
-</div>
 
+</div>
+</div>
 }
+
