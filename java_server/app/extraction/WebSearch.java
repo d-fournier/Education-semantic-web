@@ -10,6 +10,11 @@ public class WebSearch{
 	    public String title;
 	    public String url;
 	    public String description;
+	    /**
+	     * Does not exist in JSON, just for output
+	     */
+	    public int id;
+	    public int[] idSimilarWebsite;
 	}
 	
 }

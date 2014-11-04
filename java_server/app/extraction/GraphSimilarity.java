@@ -1,14 +1,18 @@
 package extraction;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
+
 import jaccard.RankingWithJaccard;
 
 
@@ -29,7 +33,6 @@ public class GraphSimilarity {
 		for(int l=0; l<queryFileToParse.length; l++)
 		{
 			queryModel=createGraph(queryFileToParse[l].getPath());
-
 		}
 
 		File[] searchEngines=folder.listFiles();
@@ -63,23 +66,26 @@ public class GraphSimilarity {
 
 		// utiliser le FileManager pour trouver le fichier d'entrée
 		InputStream in = FileManager.get().open( inputFileName );
-		if (in == null) {
-			throw new IllegalArgumentException(
-					"Fichier: " + inputFileName + " non trouvé");
-		}
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-		model.read(in,null,"N-TRIPLE");
+		try{
+			model.read(br,null,"N-TRIPLE");
+		} catch (Exception e){
+		}
 
 		return model;
 	}
 	private static double compareModels(Model m1, Model m2)
 	{
-		return (double)m2.intersection(m1).size()/m2.union(m1).size();
+		double intersection = m2.intersection(m1).size();
+		double union = m2.union(m1).size();
+		System.out.println(intersection +" / " + union);
+		return intersection/union;
 	}
 
 	public static void main(String[] args)
 	{
-		DBpediaSparqlClient.writeAllRdfFiles("machin");
-		GraphSimilarity.sortGraphs("machin");
+		DBpediaSparqlClient.writeAllRdfFiles("Turtle");
+		GraphSimilarity.sortGraphs("Turtle");
 	}
 }
