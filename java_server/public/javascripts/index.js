@@ -80,7 +80,7 @@ select: function( event, ui ) {
            var getRequests = [];
            for (var i = 0; i < nbPages; i++) {
 
-               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey4 + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
+               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
 
                getRequests.
                push($.getJSON(getQueryResultJsonUrl, function(data) {
