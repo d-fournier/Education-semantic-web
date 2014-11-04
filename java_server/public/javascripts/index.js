@@ -168,7 +168,7 @@
 
        } else { // Processed results
 
-           //r.idSimilarWebsite = [1, 3, 2, 13, 15]; for test purpose
+           //r.idSimilarWebsite = [1, 3, 2, 13, 15]; //for test purpose
            if (r.idSimilarWebsite == undefined) {
                arr = [
                    '<div class="webResult">',
