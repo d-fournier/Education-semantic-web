@@ -96,7 +96,7 @@ select: function( event, ui ) {
                    type: "POST",
                    dataType: 'json',
                    data: JSON.stringify(formattedJSON),
-                   url: "/formatResults",
+                   url: "/rdfGraphCompare",
 
                });
 

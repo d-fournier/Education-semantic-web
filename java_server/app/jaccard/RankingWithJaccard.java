@@ -91,7 +91,7 @@ public class RankingWithJaccard {
 		return sortMapByValues(jaccardMap);
 	}
 
-	private static Map<String, Double> sortMapByValues(Map<String, Double> unsortMap) {
+	public static Map<String, Double> sortMapByValues(Map<String, Double> unsortMap) {
 		 
 		// Convert Map to List
 		List<Map.Entry<String, Double>> list = 
