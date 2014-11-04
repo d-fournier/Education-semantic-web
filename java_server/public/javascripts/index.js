@@ -5,8 +5,10 @@
        $("#rdfCompare,#simpleCompare").change(function() {
            // Listening for a click on one of the radio buttons.
            //Update the post URL accordingly
-           postGoogleResultsURL = "/"+this.value;
+           postGoogleResultsURL = "/" + this.value;
        });
+
+
 
        $(".table-head").each(function() {
            $(this).hide();
@@ -88,7 +90,7 @@
            var getRequests = [];
            for (var i = 0; i < nbPages; i++) {
 
-               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey4 + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
+               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
 
                getRequests.
                push($.getJSON(getQueryResultJsonUrl, function(data) {
@@ -151,35 +153,55 @@
 
    }
 
-   function result(r) {
+   function result(r, processedResults) {
        //Class definition for a processed result
        var arr;
-       if (r.id == null)
-       { // Google Results
+       if (r.id == null) { // Google Results
            arr = [
-           '<div class="webResult">',
-           '<h2><a href="http://', r.url, '">', r.title, '</a></h2>',
-           '<p>', r.description, '</p>',
-           '<a href="http://', r.url, '">', r.url, '</a>',
-           //Could add the relevant concepts discovered when processing.
-           '</div>'
-       ] 
+               '<div class="webResult">',
+               '<h2><a href="http://', r.url, '">', r.title, '</a></h2>',
+               '<p>', r.description, '</p>',
+               '<a href="http://', r.url, '">', r.url, '</a>',
+               //Could add the relevant concepts discovered when processing.
+               '</div>'
+           ]
 
-       }
-       else{ // Processed results
+       } else { // Processed results
 
-         arr = [
-           '<div class="webResult">',
-           '<h2><a href="http://', r.url, '">', r.title, '</a></h2>',
-           '<p>', r.description, '</p>',
-           '<p> Rank of this result in the Google Search :', r.id+1,'</p>',
-           '<a href="http://', r.url, '">', r.url, '</a>',
-           //Could add the relevant concepts discovered when processing.
-           '</div>'
-       ] 
+           //r.idSimilarWebsite = [1, 3, 2, 13, 15]; for test purpose
+           if (r.idSimilarWebsite == undefined) {
+               arr = [
+                   '<div class="webResult">',
+                   '<h2><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
+                   '<p>', r.description, '</p>',
+                   '<a href="http://', r.url, '">', r.url, '</a>',
+                   '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
+                   '</div>'
+               ];
+           } else {
+               arr = [
+                   '<div class="webResult">',
+                   '<h2><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
+                   '<p>', r.description, '</p>',
+                   '<a href="http://', r.url, '">', r.url, '</a>',
+                   '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
+                   '<p> Related results : '
+               ];
+               for (var i = 0; i < r.idSimilarWebsite.length; i++) {
+                   arr.push('<a href="#' + r.idSimilarWebsite[i] + '">' + (r.idSimilarWebsite[i]+1) + ', </a>');
+               }
+               arr.push('</p></div>');
+               console.log(arr);
+
+           }
+
+
+
        }
 
        this.toString = function() {
+            console.log('join');
+           console.log(arr.join(''));
            return arr.join('');
        }
    }
@@ -195,7 +217,7 @@
        var resultsDiv = $("#" + divID);
        for (var i = 0; i < resultSet.results.length; i++) {
            // Creating a new result object and firing its toString method:
-           pageContainer.append(new result(resultSet.results[i]) + '');
+           pageContainer.append(new result(resultSet.results[i], resultSet.results) + '');
        }
        pageContainer.append('<div class="clear"></div>')
            .hide().appendTo(resultsDiv)
