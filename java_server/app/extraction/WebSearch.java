@@ -2,12 +2,11 @@ package extraction;
 
 public class WebSearch{
 
-	    public String search;
+	    public String searchTerms;
 	    public String searchEngine;
-	    public WebPagesItem[] result;
+	    public WebPagesItem[] results;
 	
-	
-	public static class WebPagesItem {
+		public static class WebPagesItem {
 	    public String title;
 	    public String url;
 	    public String description;

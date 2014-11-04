@@ -11,6 +11,13 @@ body{
     background:url('../images/bg.jpg') repeat-x #718693;
 }
 
+table{
+    align: center;
+}
+.ui-autocomplete{
+    list-style-type: none;
+    margin-right:12px;
+}
 #page{
     /* The main container div */
     width:620px;
