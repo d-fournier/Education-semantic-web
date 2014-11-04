@@ -1,8 +1,7 @@
    $(document).ready(function() {
 
-    $(".table-head").each(function(){
-          $(this).hide();
-       });
+    $(".header").hide();
+      
     $(".spinner").hide();
 
        $("#searchTerms").autocomplete({
@@ -51,9 +50,9 @@ select: function( event, ui ) {
              $("#searchTerms").prop("disabled",true);
              $("#submitButton").prop("disabled",false).css("cursor","not-allowed");
              $(".spinner").show();
-              $(".table-head").each(function(){
-              $(this).hide();
-              });
+             
+              $(".header").hide();
+              
           
            //We do need to find away to remove these from here
            var apiKey2 = "AIzaSyDZjrXVfbGRsUIZpOpB_I9BkIkIhQWoJ_Y";
@@ -157,10 +156,8 @@ select: function( event, ui ) {
    }
 
    function renderResults(resultSet, divID) {
-     $(".table-head").each(function(){
-          $(this).show();
-       });
-
+      $(".header").show();
+      
        var pageContainer = $('<div>', {
            class: 'pageContainer'
        });
