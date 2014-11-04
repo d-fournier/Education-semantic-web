@@ -1,5 +1,10 @@
    $(document).ready(function() {
 
+    $(".table-head").each(function(){
+          $(this).hide();
+       });
+    $(".spinner").hide();
+
        $("#searchTerms").autocomplete({
               appendTo: ".input-group" ,
                delay: 0, 
@@ -20,6 +25,14 @@
                     response( suggestions );
                   }
         });
+   
+       $( "#searchTerms" ).autocomplete({
+select: function( event, ui ) {
+  $("#submitButton").prop("disabled",false).css("cursor","pointer");
+
+
+}
+});
 
 
               },
@@ -32,10 +45,23 @@
            event.preventDefault();
            $("#google-results-div").html("");
            $("#processed-results-div").html("");
+
+           //can't do anything now
+           
+             $("#searchTerms").prop("disabled",true);
+             $("#submitButton").prop("disabled",false).css("cursor","not-allowed");
+             $(".spinner").show();
+              $(".table-head").each(function(){
+              $(this).hide();
+              });
+          
            //We do need to find away to remove these from here
            var apiKey2 = "AIzaSyDZjrXVfbGRsUIZpOpB_I9BkIkIhQWoJ_Y";
            var apiKey = "AIzaSyBOeLl5E9RSrKA0QpWFuF3F91n4rmcPz8o";
            var apiKey3= "AIzaSyC1ykvZWHr4EHY29MXjPoMo2_3g34liVEQ";
+
+           var apiKey4 = "AIzaSyCbU-dPDGLG3lBZC6q8M81mwJJLAMptCXE";
+
            var cx = '016813502462276054558:2encdk-x_ka';
            var searchTerms = $('#searchTerms').val();
 
@@ -53,7 +79,8 @@
            //because Google's API wouldn't have it any other way
            var getRequests = [];
            for (var i = 0; i < nbPages; i++) {
-               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey3 + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
+
+               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey4 + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
 
                getRequests.
                push($.getJSON(getQueryResultJsonUrl, function(data) {
@@ -75,9 +102,16 @@
 
                postRequest.success(function(formattedResults) {
                    console.log(formattedResults);
-                   renderResults(formattedResults,"google-results-div");
+                   renderResults(formattedJSON,"google-results-div");
                    renderResults(formattedResults,"processed-results-div");
+                    $("#searchTerms").prop("disabled", false);
+                    $(".spinner").hide();
 
+               });
+
+               postRequest.error(function( jqXHR,textStatus,errorThrown){
+                   $("#searchTerms").prop("disabled", false);
+                    $(".spinner").hide();
                });
 
                //TODO : Ask server to send processed results. Display processed results.
@@ -85,6 +119,7 @@
 
 
        });
+
    });
 
    function formatJSON(rawResponseJSON, formattedJSON) {
@@ -95,7 +130,7 @@
        for (var item in rawResult) {
            var formattedItem = {
                title: rawResult[item].title,
-               url: rawResult[item].formattedUrl.replace(/.*?:\/\//g, ""),
+               url: rawResult[item].link.replace(/.*?:\/\//g, ""),
                description: rawResult[item].snippet
            };
            formattedJSON.results.push(formattedItem);
@@ -110,9 +145,9 @@
 
        var arr = [
            '<div class="webResult">',
-           '<h2><a href="', r.url, '">', r.title, '</a></h2>',
+           '<h2><a href="http://', r.url, '">', r.title, '</a></h2>',
            '<p>', r.description, '</p>',
-           '<a href="', r.url, '">', r.url, '</a>',
+           '<a href="http://', r.url, '">', r.url, '</a>',
            //Could add the relevant concepts discovered when processing.
            '</div>'
        ];
@@ -122,6 +157,10 @@
    }
 
    function renderResults(resultSet, divID) {
+     $(".table-head").each(function(){
+          $(this).show();
+       });
+
        var pageContainer = $('<div>', {
            class: 'pageContainer'
        });
