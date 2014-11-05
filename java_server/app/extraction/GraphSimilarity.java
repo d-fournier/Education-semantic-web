@@ -73,7 +73,7 @@ public class GraphSimilarity {
 		}
 	}
 
-	private static Map<String, List<String>> compareAllSites(double minSimValue, String request)
+	public static Map<String, List<String>> compareAllSites(double minSimValue, String request)
 	{
 		Map<Couple, Double> mapCompareSiteToSite = new HashMap<Couple, Double>();
 		Map<String, List<String>> mapTotal = new HashMap<String, List<String>>();
@@ -119,6 +119,7 @@ public class GraphSimilarity {
 				Couple key = entry.getKey();
 				Double rank = entry.getValue();
 
+				//TODO Or ?????????
 				if((siteName.equals(key.s1) || siteName.equals(key.s2)) && rank>minSimValue)
 				{
 					List<String> values = mapTotal.get(siteName);
@@ -162,7 +163,6 @@ public class GraphSimilarity {
 	{
 		double intersection = m2.intersection(m1).size();
 		double union = m2.union(m1).size();
-		System.out.println(intersection +" / " + union);
 		return intersection/union;
 	}
 

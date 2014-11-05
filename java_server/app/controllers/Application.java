@@ -2,6 +2,7 @@ package controllers;
 
 import jaccard.RankingWithJaccard;
 
+import java.util.List;
 import java.util.Map;
 
 import play.mvc.BodyParser;
@@ -92,9 +93,14 @@ public class Application extends Controller {
 			System.out.println("Rank for query : "+request.searchTerms);			
 			Map<String, Double> ranking = GraphSimilarity.sortGraphs(request.searchTerms);
 
+			System.out.println("Compare website together for query : "+request.searchTerms);
+			Map<String, List<String>> siteSimilarities = GraphSimilarity.compareAllSites(0.2, "Test");
+			
 			System.out.println("Search Images for query : "+request.searchTerms);
 			Map<String, String> image = DBpediaSparqlImageClient.getImage(request.searchTerms);
+			
 			WebSearch webServiceResult = createReturnWebsearch(ranking, request,image);
+			setSimilarSite(webServiceResult, siteSimilarities);
 			
 			System.out.println("End for query : "+request.searchTerms);
 			return ok(new Gson().toJson(webServiceResult));
@@ -118,6 +124,17 @@ public class Application extends Controller {
 		}	
 		
 		return result;
+	}
+	
+	private static void setSimilarSite(WebSearch ws, Map<String, List<String>> similarities){
+		for(WebSearch.WebPagesItem item : ws.results){
+			List<String> list = similarities.get(""+item.id);
+			item.idSimilarWebsite = new int[list.size()];
+			int i = 0;
+			for(String s : list){
+				item.idSimilarWebsite[i] = Integer.parseInt(list.get(i));
+			}
+		}
 	}
 	
 }
