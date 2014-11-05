@@ -154,48 +154,82 @@
    function result(r, processedResults) {
        //Class definition for a processed result
        var arr;
-       if (r.id == null) { // Google Results
-           arr = [
-               '<div class="webResult">',
-               '<h2><a href="http://', r.url, '">', r.title, '</a></h2>',
-               '<p>', r.description, '</p>',
-               '<a href="http://', r.url, '">', r.url, '</a>',
-               //Could add the relevant concepts discovered when processing.
-               '</div>'
-           ]
+  r.idSimilarWebsite = [1, 3, 2, 13, 15]; //for test purpose
+  r.img = "http://ts1.mm.bing.net/th?id=HN.607997701065869132&pid=15.1";
+  if (r.id == null) { // Google Results
+      arr = [
+          '<div class="webResult">',
+          '<h2><a href="http://', r.url, '">', r.title, '</a></h2>',
+          '<p>', r.description, '</p>',
+          '<a href="http://', r.url, '">', r.url, '</a>',
+          //Could add the relevant concepts discovered when processing.
+          '</div>'
+      ]
 
-       } else { // Processed results
-
-           //r.idSimilarWebsite = [1, 3, 2, 13, 15]; //for test purpose
-           if (r.idSimilarWebsite == undefined) {
-               arr = [
-                   '<div class="webResult">',
-                   '<h2><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
-                   '<p>', r.description, '</p>',
-                   '<a href="http://', r.url, '">', r.url, '</a>',
-                   '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
-                   '</div>'
-               ];
-           } else {
-               arr = [
-                   '<div class="webResult">',
-                   '<h2><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
-                   '<p>', r.description, '</p>',
-                   '<a href="http://', r.url, '">', r.url, '</a>',
-                   '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
-                   '<p> Related results : '
-               ];
-               for (var i = 0; i < r.idSimilarWebsite.length; i++) {
-                   arr.push('<a href="#' + r.idSimilarWebsite[i] + '">' + (r.idSimilarWebsite[i]+1) + ', </a>');
-               }
-               arr.push('</p></div>');
-               console.log(arr);
-
-           }
+  } else { // Processed results
 
 
+      if (!r.img) {
+          if (r.idSimilarWebsite == undefined) {
+              arr = [
+                  '<div class="webResult">',
+                  '<h2><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
+                  '<p>', r.description, '</p>',
+                  '<a href="http://', r.url, '">', r.url, '</a>',
+                  '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
+                  '</div>'
+              ];
+          } else {
+              arr = [
+                  '<div class="webResult">',
+                  '<h2><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
+                  '<p>', r.description, '</p>',
+                  '<a href="http://', r.url, '">', r.url, '</a>',
+                  '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
+                  '<p> Related results : '
+              ];
+              for (var i = 0; i < r.idSimilarWebsite.length; i++) {
+                  arr.push('<a href="#' + r.idSimilarWebsite[i] + '">' + (r.idSimilarWebsite[i] + 1) + ', </a>');
 
-       }
+              }
+
+              arr.push('</p></div>');
+              console.log(arr);
+
+          }
+      } else {
+          if (r.idSimilarWebsite == undefined) {
+              arr = [
+                  '<div class="webResult">',
+                  '<h2 data-container="body" data-toggle="popover" data-placement="right" att="', r.img, '" class="pop-image"><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
+                  '<p>', r.description, '</p>',
+                  '<a href="http://', r.url, '">', r.url, '</a>',
+                  '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
+                  '</div>'
+              ];
+          } else {
+              arr = [
+                  '<div class="webResult">',
+                  '<h2 data-container="body" data-toggle="popover" data-placement="right" att="', r.img, '" class="pop-image"><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
+                  '<p>', r.description, '</p>',
+                  '<a href="http://', r.url, '">', r.url, '</a>',
+                  '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
+                  '<p> Related results : '
+              ];
+              for (var i = 0; i < r.idSimilarWebsite.length; i++) {
+                  arr.push('<a href="#' + r.idSimilarWebsite[i] + '">' + (r.idSimilarWebsite[i] + 1) + ', </a>');
+
+              }
+
+              arr.push('</p></div>');
+              console.log(arr);
+
+          }
+      }
+
+}
+       
+
 
        this.toString = function() {
             console.log('join');
@@ -219,4 +253,13 @@
        pageContainer.append('<div class="clear"></div>')
            .hide().appendTo(resultsDiv)
            .fadeIn('slow');
+           $('.pop-image').popover({
+  html: true,
+  trigger: 'hover',
+  content: function () {
+    return '<img src="'+$(this).attr("att") + '" />';
+  }
+});
+
    }
+
