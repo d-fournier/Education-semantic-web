@@ -66,8 +66,8 @@ select: function( event, ui ) {
            var searchTerms = $('#searchTerms').val();
 
            //for testing
-           var nbResults = 20;
-           var resultsPerPage = 10;
+           var nbResults = 5;
+           var resultsPerPage = 5;
            var nbPages = nbResults / resultsPerPage;
 
            var formattedJSON = {
