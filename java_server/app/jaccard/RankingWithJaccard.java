@@ -16,9 +16,8 @@ import java.util.Map;
 
 public class RankingWithJaccard {
 
-	private static String DBPEDIA_EXTENSION = "dbpedia";
-	private static String CONCEPT_EXTENSION = "concept";
-	private static String TMP_PATH = "tmp\\";
+	private static final String DBPEDIA_EXTENSION = "dbpedia";
+	private static final String TMP_PATH = "tmp\\";
 
 	public static void main(String[] args) {
 		Map<String, Double> ranking = attributeAJaccardMark("berlin");
@@ -39,19 +38,18 @@ public class RankingWithJaccard {
 
 		Map <String, Double> jaccardMap = new HashMap<>();
 
-		TMP_PATH += userRequest;
+		String path = TMP_PATH + userRequest;
 		String [] listOfSearchEngineForOneSearch;
 		List <String> list_dbpediaPathName = new ArrayList<>();
 
 		// Retrieve all Browsers folder
-		listOfSearchEngineForOneSearch = retrieveSearchEngineFolderForOneRequest(TMP_PATH);
+		listOfSearchEngineForOneSearch = retrieveSearchEngineFolderForOneRequest(path);
 
 		// Retrieve all Sites folders in each Browser folder
-		list_dbpediaPathName = getAllDbpediaPathName(TMP_PATH, listOfSearchEngineForOneSearch);
+		list_dbpediaPathName = getAllDbpediaPathName(path, listOfSearchEngineForOneSearch);
 
 		// Retrieve file .concept
-		String conceptPathName = TMP_PATH;
-		conceptPathName = retrieveConceptForTheSearch(TMP_PATH);
+		String conceptPathName = retrieveConceptForTheSearch(path);
 
 		// Read .concept
 		File file = new File(conceptPathName);
@@ -162,7 +160,7 @@ public class RankingWithJaccard {
 
 			String extensionFiles = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-			if (extensionFiles.equals(CONCEPT_EXTENSION)){
+			if (extensionFiles.equals(DBPEDIA_EXTENSION)){
 				pathFileNameConcept += "\\" + fileName;
 				return pathFileNameConcept;
 			}
