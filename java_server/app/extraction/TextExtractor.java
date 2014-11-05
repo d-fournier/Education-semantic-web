@@ -20,7 +20,7 @@ public class TextExtractor {
 	public static final String EXTENSION_FILE = ".resultsearch";
 	public static final String REGEX = "(.*?)\\/.*";
 
-	
+
 	public static void main(String[] args){
 		WebSearch ws = extractSearchResultFromJson(JSON_SAMPLE);
 		downloadWebsiteContent(ws);
@@ -46,6 +46,11 @@ public class TextExtractor {
 				}
 			}
 		}
+		int i = 0;
+		for(WebSearch.WebPagesItem item : webSearch.results){
+			item.id = i;
+			i++;
+		}
 		return webSearch;
 	}
 
@@ -55,11 +60,14 @@ public class TextExtractor {
 	 */
 	public static void downloadWebsiteContent(WebSearch webSearch) {
 		for(WebSearch.WebPagesItem webPagesListItem : webSearch.results){
-			String bodyFromUrl = extractBodyTextFromUrl(webPagesListItem.url);
-			if(bodyFromUrl != null && bodyFromUrl != ""){
-				String text = webPagesListItem.description.replace("\n", " ") + bodyFromUrl;
-				saveTextIntoFile(webSearch.searchTerms,webSearch.searchEngine, webPagesListItem.url, text, EXTENSION_FILE);       				
-			}
+			try{
+
+				String bodyFromUrl = extractBodyTextFromUrl(webPagesListItem.url);
+				if(bodyFromUrl != null && bodyFromUrl != ""){
+					String text = webPagesListItem.description.replace("\n", " ") + bodyFromUrl;
+					saveTextIntoFile(webSearch,webPagesListItem, text, EXTENSION_FILE);       				
+				}
+			}catch(Exception e){}
 		}
 	}
 
@@ -87,21 +95,14 @@ public class TextExtractor {
 		return elementBody.text();
 	}
 
-	/**
-	 * Create a file into ./tmp/externFolder/internalFolder/filename.tmp
-	 * @param externFolder
-	 * @param internFolder
-	 * @param fileName
-	 * @param text
-	 */
-	public static void saveTextIntoFile(String externFolder,String internFolder, String fileName, String text, String extension) {
-		String filenameFinal = getStringFromUrl(fileName);
+	public static void saveTextIntoFile(WebSearch webSearch ,WebSearch.WebPagesItem webSearchItem, String text, String extension) {
+		String filenameFinal = getStringFromUrl(webSearchItem);
 
-		File folder = new File("./tmp/"+externFolder+"/"+internFolder);
+		File folder = new File("./tmp/"+webSearch.searchTerms+"/"+webSearch.searchEngine);
 		folder.mkdirs();
 		// un dossier par search
 		// extension tmp pour gitignore
-		String pathAndFileName = "./tmp/"+externFolder+"/"+internFolder+"/" + filenameFinal+extension;
+		String pathAndFileName = "./tmp/"+webSearch.searchTerms+"/"+webSearch.searchEngine+"/" + filenameFinal+extension;
 		try {
 			PrintWriter out = new PrintWriter(pathAndFileName);
 			out.println(text);	
@@ -111,9 +112,9 @@ public class TextExtractor {
 			e.printStackTrace();
 		}
 	}
-	
-	public static String getStringFromUrl(String url){
-		String result = url.replaceAll(REGEX, "$1");
+
+	public static String getStringFromUrl(WebSearch.WebPagesItem item){
+		String result = ""+item.id;
 		return result;
 	}
 

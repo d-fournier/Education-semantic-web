@@ -15,6 +15,7 @@ public class WebSearch{
 	     */
 	    public int id;
 	    public int[] idSimilarWebsite;
+	    public String img;
 	}
 	
 }

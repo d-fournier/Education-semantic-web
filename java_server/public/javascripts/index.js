@@ -1,6 +1,6 @@
    $(document).ready(function() {
 
-       var postGoogleResultsURL = $("#simpleCompare").val(); // Determined according to the checked radio button
+       var postGoogleResultsURL = $(".radio-class:checked").val(); // Determined according to the checked radio button
        $("#rdfCompare,#simpleCompare").change(function() {
            // Listening for a click on one of the radio buttons.
            //Update the post URL accordingly
@@ -73,7 +73,7 @@
            var searchTerms = $('#searchTerms').val();
 
            //for testing
-           var nbResults = 20;
+           var nbResults = 10;
            var resultsPerPage = 10;
            var nbPages = nbResults / resultsPerPage;
 
@@ -88,7 +88,8 @@
            for (var i = 0; i < nbPages; i++) {
 
 
-               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey2 + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
+               var getQueryResultJsonUrl = "https://www.googleapis.com/customsearch/v1?key=" + apiKey + "&cx=" + cx + "&q=" + searchTerms + "&num=" + resultsPerPage + "&start=" + (i * resultsPerPage + 1);
+
 
                getRequests.
                push($.getJSON(getQueryResultJsonUrl, function(data) {
@@ -154,8 +155,7 @@
    function result(r, processedResults) {
        //Class definition for a processed result
        var arr;
-  r.idSimilarWebsite = [1, 3, 2, 13, 15]; //for test purpose
-  r.img = "http://ts1.mm.bing.net/th?id=HN.607997701065869132&pid=15.1";
+  //r.idSimilarWebsite = [1, 3, 2, 13, 15]; //for test purpose
   if (r.id == null) { // Google Results
       arr = [
           '<div class="webResult">',
@@ -163,6 +163,8 @@
           '<p>', r.description, '</p>',
           '<a href="http://', r.url, '">', r.url, '</a>',
           //Could add the relevant concepts discovered when processing.
+          '<p>&zwnj</p>',
+          '<p>&zwnj</p>',
           '</div>'
       ]
 
@@ -201,7 +203,7 @@
           if (r.idSimilarWebsite == undefined) {
               arr = [
                   '<div class="webResult">',
-                  '<h2 data-container="body" data-toggle="popover" data-placement="right" att="', r.img, '" class="pop-image"><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
+                  '<h2 data-container="body" data-toggle="popover" data-placement="bottom" att="', r.img, '" class="pop-image"><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
                   '<p>', r.description, '</p>',
                   '<a href="http://', r.url, '">', r.url, '</a>',
                   '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
@@ -210,7 +212,7 @@
           } else {
               arr = [
                   '<div class="webResult">',
-                  '<h2 data-container="body" data-toggle="popover" data-placement="right" att="', r.img, '" class="pop-image"><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
+                  '<h2 data-container="body" data-toggle="popover" data-placement="bottom" att="', r.img, '" class="pop-image"><a name=', r.id, ' href="http://', r.url, '">', r.title, '</a></h2>',
                   '<p>', r.description, '</p>',
                   '<a href="http://', r.url, '">', r.url, '</a>',
                   '<p> Rank of this result in the Google Search :', r.id + 1, '</p>',
@@ -257,7 +259,7 @@
   html: true,
   trigger: 'hover',
   content: function () {
-    return '<img src="'+$(this).attr("att") + '" />';
+    return '<img class="pop-img" src="'+$(this).attr("att") + '" />';
   }
 });
 

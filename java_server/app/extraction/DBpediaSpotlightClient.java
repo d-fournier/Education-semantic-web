@@ -3,6 +3,7 @@ package extraction;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,42 +20,60 @@ public class DBpediaSpotlightClient extends AnnotationClient {
 	private final static String API_URL = "http://spotlight.dbpedia.org/";
 	private static final double CONFIDENCE = 0.2;
 	private static final int SUPPORT = 20;
+	private static final int TEXTPIECESIZE=3000;
 
 	@Override
 	public List<String> extract(String text) {
 		String spotlightResponse;
-		
-		if(text.length() > 10000){
-			text = text.substring(0, 10000);
-		}
-		
-		try {
-			GetMethod getMethod = new GetMethod(API_URL + "rest/annotate/?" +
-					"confidence=" + CONFIDENCE
-					+ "&support=" + SUPPORT
-					+ "&text=" + URLEncoder.encode(text, "utf-8"));
-			getMethod.addRequestHeader(new Header("Accept", "application/json"));
-			spotlightResponse = request(getMethod);
-		} catch (Exception e) {
-			return null;
-		}
-		assert spotlightResponse != null;
-		JSONObject resultJSON = null;
-		JSONArray entities = null;
-		try {
-			resultJSON = new JSONObject(spotlightResponse);
-			entities = resultJSON.getJSONArray("Resources");
-		} catch (JSONException e) {
-			return null;
-		}
 		LinkedList<String> resources = new LinkedList<String>();
-		for(int i = 0; i < entities.length(); i++) {
-			try {
-				JSONObject entity = entities.getJSONObject(i);
-				resources.add(new String(entity.getString("@URI")));
-			} catch (JSONException e) {
+		
+		List<String> textPieces=new ArrayList<String>();
+		
+		
+		while(!text.isEmpty())
+		{
+			if(text.length() > TEXTPIECESIZE){
+				textPieces.add(text.substring(0, TEXTPIECESIZE));
+				text=text.substring(TEXTPIECESIZE);
+			}
+			else
+			{
+				textPieces.add(text);
+				text="";
 			}
 		}
+		
+		for(String t : textPieces)
+		{
+			try {
+				GetMethod getMethod = new GetMethod(API_URL + "rest/annotate/?" +
+						"confidence=" + CONFIDENCE
+						+ "&support=" + SUPPORT
+						+ "&text=" + URLEncoder.encode(t, "utf-8"));
+				getMethod.addRequestHeader(new Header("Accept", "application/json"));
+				spotlightResponse = request(getMethod);
+			} catch (Exception e) {
+				return null;
+			}
+			assert spotlightResponse != null;
+			JSONObject resultJSON = null;
+			JSONArray entities = null;
+			try {
+				resultJSON = new JSONObject(spotlightResponse);
+				entities = resultJSON.getJSONArray("Resources");
+			} catch (JSONException e) {
+				return null;
+			}
+			
+			for(int i = 0; i < entities.length(); i++) {
+				try {
+					JSONObject entity = entities.getJSONObject(i);
+					resources.add(new String(entity.getString("@URI")));
+				} catch (JSONException e) {
+				}
+			}
+		}
+		
 		return resources;
 	}
 
@@ -95,7 +114,7 @@ public class DBpediaSpotlightClient extends AnnotationClient {
 
 	public static void main(String[] args) throws Exception {
 		
-		DBpediaSpotlightClient.writeTextConcepts("Mental disorder");
+		DBpediaSpotlightClient.writeTextConcepts("test");
 
 	
 	}
