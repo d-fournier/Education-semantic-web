@@ -48,7 +48,7 @@ public class DBpediaSparqlClient {
 			e1.printStackTrace();
 		}
 		HttpMethod method =
-				new GetMethod("http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query="+query+"+&format=json&timeout=30000");
+				new GetMethod("http://dbpedia-live.openlinksw.com/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query="+query+"+&format=json&timeout=30000");
 		HttpClient client = new HttpClient();
 
 		try {
