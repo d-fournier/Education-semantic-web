@@ -99,11 +99,12 @@ public class GraphSimilarity {
 						filesName = new String[filesToParse.length];
 					}
 					Model websiteModel=createGraph(filesToParse[k].getPath());
-					Couple couple = new Couple();
-					couple.s1 = filesToParse[k].getName();
+					
 					filesName[k] = filesToParse[k].getName();
 					for(int m=0;m<filesToParse.length;m++)
 					{
+						Couple couple = new Couple();
+						couple.s1 = filesToParse[k].getName();
 						double rank=compareModels(createGraph(filesToParse[m].getPath()), websiteModel);
 						couple.s2 = filesToParse[m].getName();
 						mapCompareSiteToSite.put(couple, rank);
@@ -119,22 +120,21 @@ public class GraphSimilarity {
 				Couple key = entry.getKey();
 				Double rank = entry.getValue();
 
-				//TODO Or ?????????
-				if((siteName.equals(key.s1) || siteName.equals(key.s2)) && rank>minSimValue)
+				if(rank>=minSimValue && ((siteName.equals(key.s1) && !siteName.equals(key.s2)) || (siteName.equals(key.s2) && !siteName.equals(key.s1))))
 				{
-					List<String> values = mapTotal.get(siteName);
+					List<String> values = mapTotal.get(siteName.replace(".rdf", ""));
 					if(values==null)
 					{
 						values = new ArrayList<String>();
 					}
-					if(siteName.equals(key.s1))
+					if(siteName.equals(key.s1) && !values.contains(key.s2.replace(".rdf", "")))
 					{
-						values.add(key.s2);
-					}else 
+						values.add(key.s2.replace(".rdf", ""));
+					}else if(siteName.equals(key.s2) && !values.contains(key.s1.replace(".rdf", "")))
 					{
-						values.add(key.s1);
+						values.add(key.s1.replace(".rdf", ""));
 					}
-					mapTotal.put(siteName, values);
+					mapTotal.put(siteName.replace(".rdf", ""), values);
 				}
 			}
 		}
@@ -168,8 +168,8 @@ public class GraphSimilarity {
 
 	public static void main(String[] args)
 	{
-		//DBpediaSparqlClient.writeAllRdfFiles("Test");
+		//DBpediaSparqlClient.writeAllRdfFiles("Cancoillotte");
 		//GraphSimilarity.sortGraphs("Test");
-		GraphSimilarity.compareAllSites(0.2, "Test");
+		//GraphSimilarity.compareAllSites(0.3, "Cancoillotte");
 	}
 }
