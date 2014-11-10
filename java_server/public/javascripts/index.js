@@ -66,7 +66,6 @@
            var apiKey2 = "AIzaSyDZjrXVfbGRsUIZpOpB_I9BkIkIhQWoJ_Y";
            var apiKey = "AIzaSyBOeLl5E9RSrKA0QpWFuF3F91n4rmcPz8o";
            var apiKey3 = "AIzaSyC1ykvZWHr4EHY29MXjPoMo2_3g34liVEQ";
-
            var apiKey4 = "AIzaSyCbU-dPDGLG3lBZC6q8M81mwJJLAMptCXE";
 
            var cx = '016813502462276054558:2encdk-x_ka';
@@ -74,7 +73,7 @@
 
            //for testing
 
-           var nbResults = 10;
+           var nbResults = 20;
            var resultsPerPage = 10;
 
            var nbPages = nbResults / resultsPerPage;
@@ -128,7 +127,6 @@
                    $(".spinner").hide();
                });
 
-               //TODO : Ask server to send processed results. Display processed results.
            });
 
 
@@ -165,8 +163,7 @@
           '<p>', r.description, '</p>',
           '<a href="http://', r.url, '">', r.url, '</a>',
           //Could add the relevant concepts discovered when processing.
-          '<p>&zwnj</p>',
-          '<p>&zwnj</p>',
+          '<br><br>',
           '</div>'
       ]
 
