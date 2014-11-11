@@ -94,7 +94,7 @@ public class Application extends Controller {
 			Map<String, Double> ranking = GraphSimilarity.sortGraphs(request.searchTerms);
 
 			System.out.println("Compare website together for query : "+request.searchTerms);
-			Map<String, List<String>> siteSimilarities = GraphSimilarity.compareAllSites(0.2, request.searchTerms);
+			Map<String, List<String>> siteSimilarities = GraphSimilarity.compareAllSites(0.1, request.searchTerms);
 			
 			System.out.println("Search Images for query : "+request.searchTerms);
 			Map<String, String> image = DBpediaSparqlImageClient.getImage(request.searchTerms);
@@ -117,7 +117,6 @@ public class Application extends Controller {
 		result.results = new WebSearch.WebPagesItem[ranking.size()];
 		int i = 0;
 		for(String s : ranking.keySet()){
-//			System.out.println(s +" : "+ranking.get(s));
 			result.results[i] = InformationExtractor.findInfoFromFile(originalRequest, s);
 			result.results[i].img = imageMap.get(s);
 			i++;
